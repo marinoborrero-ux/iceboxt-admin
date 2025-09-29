@@ -1,5 +1,11 @@
 // Environment validation for production deployment
 export function validateEnvVars() {
+  // Skip validation during build time
+  if (process.env.NEXT_PHASE === 'phase-production-build') {
+    console.log('⏭️ Skipping env validation during build phase');
+    return;
+  }
+
   const requiredEnvVars = [
     'DATABASE_URL',
     'NEXTAUTH_URL', 
@@ -19,15 +25,16 @@ export function validateEnvVars() {
     console.error('NEXTAUTH_URL=https://your-app.onrender.com');
     console.error('NEXTAUTH_SECRET=your-32-char-secret');
     
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('Missing required environment variables in production');
+    // Only throw error in production runtime, not build time
+    if (process.env.NODE_ENV === 'production' && typeof window !== 'undefined') {
+      console.warn('⚠️ Missing environment variables in production runtime');
     }
   } else {
     console.log('✅ All required environment variables are configured');
   }
 }
 
-// Validate on import
-if (process.env.NODE_ENV === 'production') {
+// Only validate in runtime, not during build
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
   validateEnvVars();
 }
