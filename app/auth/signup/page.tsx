@@ -54,7 +54,7 @@ export default function SignUp() {
 
       if (response.ok) {
         setSuccess('Account created successfully! Signing you in...');
-        
+
         // Auto sign in after successful signup
         const result = await signIn('credentials', {
           email: formData.email,
@@ -123,7 +123,7 @@ export default function SignUp() {
                   </AlertDescription>
                 </Alert>
               )}
-              
+
               <div className="space-y-2">
                 <Label htmlFor="name">Full Name</Label>
                 <Input
