@@ -216,7 +216,7 @@ export default function SignUp() {
         </Card>
 
         <div className="mt-6 text-center text-sm text-gray-500">
-          <p>© 2024 IceBoxT Admin. All rights reserved.</p>
+          <p>© 2025 IceBoxT Admin. All rights reserved.</p>
         </div>
       </div>
     </div>
