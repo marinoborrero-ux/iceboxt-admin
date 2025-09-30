@@ -3,7 +3,7 @@ services:
     name: iceboxt-admin
     env: node
     plan: free
-    buildCommand: chmod +x build.sh && ./build.sh
+    buildCommand: npm install --legacy-peer-deps && npx prisma generate && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV
