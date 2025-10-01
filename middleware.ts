@@ -8,7 +8,7 @@ export default withAuth(
     const token = req.nextauth.token;
 
     // Debug logging for mobile API access
-    if (pathname.startsWith('/api/orders/mobile')) {
+    if (pathname.startsWith('/api/orders/mobile') || pathname.startsWith('/api/products/mobile')) {
       console.log('🔍 MOBILE API ACCESS:', pathname);
       console.log('📱 User-Agent:', req.headers.get('user-agent') || 'Unknown');
       console.log('🔑 Has token:', !!token);
@@ -28,7 +28,8 @@ export default withAuth(
     if (pathname.startsWith('/dashboard') ||
       (pathname.startsWith('/api') &&
         !pathname.startsWith('/api/auth') &&
-        !pathname.startsWith('/api/orders/mobile'))) {
+        !pathname.startsWith('/api/orders/mobile') &&
+        !pathname.startsWith('/api/products/mobile'))) {
       if (!token || token.role !== 'admin') {
         return NextResponse.redirect(new URL('/auth/signin', req.url));
       }
@@ -55,6 +56,6 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/((?!api/auth|api/orders/mobile|_next/static|_next/image|favicon.ico|auth/signin|auth/signup).*)',
+    '/((?!api/auth|api/orders/mobile|api/products/mobile|_next/static|_next/image|favicon.ico|auth/signin|auth/signup).*)',
   ],
 };

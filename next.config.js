@@ -18,7 +18,7 @@ const nextConfig = {
   compress: true,
   // Image optimization for Render.com
   images: {
-    domains: ['localhost'],
+    domains: ['localhost', 'images.unsplash.com'],
     unoptimized: process.env.NODE_ENV === 'production',
   },
   // Webpack configuration for path resolution

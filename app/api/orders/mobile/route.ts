@@ -3,15 +3,27 @@ import { prisma } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
+// Generic API key for mobile access
+const MOBILE_API_KEY = 'icebox-mobile-2024';
+
 // Add CORS headers to all responses
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, X-User-Email',
+  'Access-Control-Allow-Headers': 'Content-Type, X-User-Email, X-API-Key',
 };
 
 export async function GET(request: NextRequest) {
   console.log('📱 Mobile API GET - fetching orders from database');
+
+  // Validate API key if provided (optional but recommended)
+  const apiKey = request.headers.get('x-api-key');
+  if (apiKey && apiKey !== MOBILE_API_KEY) {
+    console.log('❌ Invalid API key provided for orders');
+    return NextResponse.json({
+      error: 'Invalid API key'
+    }, { status: 401, headers: corsHeaders });
+  }
 
   try {
     // Get all orders from the database with related data
@@ -124,6 +136,15 @@ export async function OPTIONS(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     console.log('📱 Mobile order received');
+
+    // Validate API key if provided (optional but recommended)
+    const apiKey = request.headers.get('x-api-key');
+    if (apiKey && apiKey !== MOBILE_API_KEY) {
+      console.log('❌ Invalid API key provided for order creation');
+      return NextResponse.json({
+        error: 'Invalid API key'
+      }, { status: 401, headers: corsHeaders });
+    }
 
     const body = await request.json();
     console.log('📱 Mobile order data:', JSON.stringify(body, null, 2));
