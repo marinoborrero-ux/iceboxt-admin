@@ -17,7 +17,7 @@ async function seedCategoriesAndProducts() {
         ];
 
         console.log('📂 Creating categories...');
-        const createdCategories = {};
+        const createdCategories: Record<string, any> = {};
         for (const category of categories) {
             const created = await prisma.category.upsert({
                 where: { name: category.name },
