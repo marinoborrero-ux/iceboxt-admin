@@ -27,7 +27,7 @@ export default function CategoriesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   // Modal states
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -147,7 +147,7 @@ export default function CategoriesPage() {
           </h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">Organize your products with categories</p>
         </div>
-        
+
         <Button onClick={handleCreateCategory} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Category
@@ -285,7 +285,7 @@ export default function CategoriesPage() {
           >
             Previous
           </Button>
-          
+
           <div className="flex items-center gap-1">
             {[...Array(totalPages)].map((_, index) => {
               const page = index + 1;

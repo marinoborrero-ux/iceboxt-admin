@@ -29,7 +29,7 @@ export default function DeliveryPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   // Modal states
   const [showDeliveryModal, setShowDeliveryModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -149,7 +149,7 @@ export default function DeliveryPage() {
           </h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your delivery team and assignments</p>
         </div>
-        
+
         <Button onClick={handleCreateDeliveryPerson} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Delivery Person
@@ -293,7 +293,7 @@ export default function DeliveryPage() {
           >
             Previous
           </Button>
-          
+
           <div className="flex items-center gap-1">
             {[...Array(totalPages)].map((_, index) => {
               const page = index + 1;

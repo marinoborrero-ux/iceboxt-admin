@@ -32,7 +32,7 @@ export default function CustomersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   // Modal states
   const [showCustomerModal, setShowCustomerModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -152,7 +152,7 @@ export default function CustomersPage() {
           </h1>
           <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your customer base and relationships</p>
         </div>
-        
+
         <Button onClick={handleCreateCustomer} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Customer
@@ -307,7 +307,7 @@ export default function CustomersPage() {
           >
             Previous
           </Button>
-          
+
           <div className="flex items-center gap-1">
             {[...Array(totalPages)].map((_, index) => {
               const page = index + 1;

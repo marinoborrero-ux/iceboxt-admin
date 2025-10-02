@@ -33,7 +33,7 @@ export default function DashboardPage() {
     try {
       setIsLoading(true);
       const response = await fetch('/api/dashboard/stats');
-      
+
       if (!response.ok) {
         throw new Error('Failed to fetch dashboard statistics');
       }
