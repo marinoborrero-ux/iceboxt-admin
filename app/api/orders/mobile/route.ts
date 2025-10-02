@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
       orderBy: {
         createdAt: 'desc'
       }
-    });
+    }) as any;
 
     console.log(`📊 Found ${orders.length} orders in database`);
 
@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
       data: {
         totalOrders: orders.length,
-        orders: orders.map(order => ({
+        orders: orders.map((order: any) => ({
           id: order.id,
           orderNumber: order.orderNumber,
           status: order.status,
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
             address: order.customer.address,
             city: order.customer.city,
           },
-          items: order.items.map(item => ({
+          items: order.items.map((item: any) => ({
             id: item.id,
             quantity: item.quantity,
             price: Number(item.price),
@@ -286,7 +286,7 @@ export async function POST(request: NextRequest) {
           }
         },
       },
-    });
+    }) as any;
 
     console.log('📱 Mobile order created successfully:', order.id);
 

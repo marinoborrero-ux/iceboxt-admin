@@ -71,7 +71,7 @@ export async function GET(request: NextRequest) {
         }
 
         // Transform orders to mobile-friendly format
-        const mobileOrders = customer.orders.map(order => ({
+        const mobileOrders = (customer as any).orders.map((order: any) => ({
             id: order.id,
             orderNumber: order.orderNumber,
             status: order.status,
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
             notes: order.notes,
             createdAt: order.createdAt.toISOString(),
             updatedAt: order.updatedAt.toISOString(),
-            items: order.items.map(item => ({
+            items: order.items.map((item: any) => ({
                 id: item.id,
                 name: item.product.name,
                 imageUrl: item.product.image || `assets/foods/${item.product.name.toLowerCase().replace(' ', '_')}.jpg`,

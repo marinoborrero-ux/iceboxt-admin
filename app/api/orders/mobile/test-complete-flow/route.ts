@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
                     }
                 }
             }
-        });
+        }) as any;
 
         if (!createdOrder) {
             throw new Error('Order was not found in database after creation');
@@ -110,8 +110,8 @@ export async function POST(request: NextRequest) {
                     orderNumber: createdOrder.orderNumber,
                     status: createdOrder.status,
                     total: Number(createdOrder.total),
-                    customer: `${createdOrder.customer.firstName} ${createdOrder.customer.lastName}`,
-                    itemCount: createdOrder.items.length
+                    customer: `${(createdOrder as any).customer.firstName} ${(createdOrder as any).customer.lastName}`,
+                    itemCount: (createdOrder as any).items.length
                 },
                 mobileApiResponse: mobileOrderResult,
                 recentTestOrders: allOrders.map(order => ({
