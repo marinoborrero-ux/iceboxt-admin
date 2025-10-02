@@ -80,6 +80,23 @@ export default function OrdersPage() {
 
   const { toast } = useToast();
 
+  const handleRefresh = async () => {
+    try {
+      await fetchOrders(currentPage, searchTerm, statusFilter);
+      toast({
+        title: 'Success',
+        description: 'Orders refreshed successfully',
+      });
+    } catch (error) {
+      console.error('Refresh error:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to refresh orders',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const fetchOrders = async (page = 1, search = searchTerm, status = statusFilter) => {
     try {
       setIsLoading(true);
@@ -253,11 +270,23 @@ export default function OrdersPage() {
           </h1>
           <p className="text-gray-600 mt-1">Track and manage customer orders</p>
         </div>
-        
-        <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Order
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <Button
+            onClick={handleRefresh}
+            variant="outline"
+            size="icon"
+            className="hover:bg-gray-50"
+            disabled={isLoading}
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </Button>
+
+          <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Order
+          </Button>
+        </div>
       </div>
 
       {/* Search and Filters */}

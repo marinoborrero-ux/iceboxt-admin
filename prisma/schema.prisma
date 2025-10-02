@@ -85,8 +85,8 @@ model Product {
   categoryId  String      @map("category_id")
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt @map("updated_at")
-  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   orderItems  OrderItem[]
+  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 
   @@map("products")
 }
