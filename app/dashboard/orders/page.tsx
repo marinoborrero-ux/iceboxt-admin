@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ShoppingCart, Search, Filter, Eye, Truck, Calendar, DollarSign, Plus, Edit, Trash2 } from 'lucide-react';
+import { ShoppingCart, Search, Filter, Eye, Truck, Calendar, DollarSign, Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import OrderModal from '@/components/dashboard/modals/order-modal';
@@ -254,10 +254,21 @@ export default function OrdersPage() {
           <p className="text-gray-600 mt-1">Track and manage customer orders</p>
         </div>
         
-        <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
-          <Plus className="w-4 h-4 mr-2" />
-          Create Order
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button 
+            onClick={() => fetchOrders(currentPage, searchTerm, statusFilter)} 
+            variant="outline"
+            size="icon"
+            className="hover:bg-gray-50"
+          >
+            <RefreshCw className="w-4 h-4" />
+          </Button>
+          
+          <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Create Order
+          </Button>
+        </div>
       </div>
 
       {/* Search and Filters */}
