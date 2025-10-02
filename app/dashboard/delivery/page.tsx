@@ -140,17 +140,17 @@ export default function DeliveryPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <Truck className="w-8 h-8 text-blue-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+            <Truck className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
             Delivery Personnel
           </h1>
-          <p className="text-gray-600 mt-1">Manage your delivery team and assignments</p>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your delivery team and assignments</p>
         </div>
         
-        <Button onClick={handleCreateDeliveryPerson} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={handleCreateDeliveryPerson} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Delivery Person
         </Button>
@@ -158,19 +158,19 @@ export default function DeliveryPage() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex gap-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search delivery personnel by name, email, or phone..."
+                placeholder="Search delivery personnel..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
                 className="pl-10"
               />
             </div>
-            <Button onClick={handleSearch} variant="outline">
+            <Button onClick={handleSearch} variant="outline" className="w-full sm:w-auto">
               Search
             </Button>
           </div>
@@ -179,10 +179,10 @@ export default function DeliveryPage() {
 
       {/* Delivery Persons Grid */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {[...Array(9)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="space-y-3">
                   <div className="h-6 bg-gray-200 rounded w-3/4"></div>
                   <div className="h-4 bg-gray-200 rounded"></div>

@@ -26,36 +26,36 @@ export default function Header({ onMenuClick }: HeaderProps) {
   };
 
   return (
-    <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+    <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-2 sm:gap-x-4 border-b border-gray-200 bg-white px-3 sm:px-4 shadow-sm lg:px-8">
       <Button
         variant="ghost"
         size="icon"
-        className="lg:hidden"
+        className="lg:hidden h-8 w-8 sm:h-10 sm:w-10"
         onClick={onMenuClick}
       >
-        <Menu className="h-6 w-6" />
+        <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
         <span className="sr-only">Open sidebar</span>
       </Button>
 
-      <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-        <div className="flex flex-1 items-center">
-          <h1 className="text-xl font-semibold text-gray-900">
+      <div className="flex flex-1 gap-x-2 sm:gap-x-4 self-stretch lg:gap-x-6">
+        <div className="flex flex-1 items-center min-w-0">
+          <h1 className="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900 truncate">
             Welcome to IceBoxT Admin
           </h1>
         </div>
-        <div className="flex items-center gap-x-4 lg:gap-x-6">
+        <div className="flex items-center gap-x-2 sm:gap-x-4 lg:gap-x-6">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                <Avatar className="h-8 w-8">
+              <Button variant="ghost" className="relative h-8 w-8 sm:h-9 sm:w-9 rounded-full">
+                <Avatar className="h-8 w-8 sm:h-9 sm:w-9">
                   <AvatarImage src="" />
-                  <AvatarFallback className="bg-blue-600 text-white">
+                  <AvatarFallback className="bg-blue-600 text-white text-sm">
                     {session?.user?.name?.[0]?.toUpperCase() || 'A'}
                   </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-48 sm:w-56" align="end" forceMount>
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none">

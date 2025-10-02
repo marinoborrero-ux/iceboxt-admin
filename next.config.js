@@ -18,7 +18,19 @@ const nextConfig = {
   compress: true,
   // Image optimization for Render.com
   images: {
-    domains: ['localhost', 'images.unsplash.com'],
+    domains: [
+      'localhost',
+      'images.unsplash.com',
+      'www.dessertnowdinnerlater.com',
+      'via.placeholder.com',
+      'picsum.photos'
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
     unoptimized: process.env.NODE_ENV === 'production',
   },
   // Webpack configuration for path resolution

@@ -261,28 +261,28 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <ShoppingCart className="w-8 h-8 text-blue-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+            <ShoppingCart className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
             Order Management
           </h1>
-          <p className="text-gray-600 mt-1">Track and manage customer orders</p>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Track and manage customer orders</p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <Button
             onClick={handleRefresh}
             variant="outline"
             size="icon"
-            className="hover:bg-gray-50"
+            className="hover:bg-gray-50 flex-shrink-0"
             disabled={isLoading}
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
           </Button>
 
-          <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
+          <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none">
             <Plus className="w-4 h-4 mr-2" />
             Create Order
           </Button>
@@ -291,12 +291,12 @@ export default function OrdersPage() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex gap-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search orders by number or customer..."
+                placeholder="Search orders..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
@@ -305,7 +305,7 @@ export default function OrdersPage() {
             </div>
 
             <Select value={statusFilter} onValueChange={handleStatusFilter}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-full sm:w-48">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -317,7 +317,7 @@ export default function OrdersPage() {
               </SelectContent>
             </Select>
 
-            <Button onClick={handleSearch} variant="outline">
+            <Button onClick={handleSearch} variant="outline" className="w-full sm:w-auto">
               <Filter className="w-4 h-4 mr-2" />
               Filter
             </Button>
@@ -342,28 +342,28 @@ export default function OrdersPage() {
           </CardContent>
         </Card>
       ) : orders.length === 0 ? (
-        <Card className="p-12 text-center">
-          <ShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-600 mb-2">No Orders Found</h3>
-          <p className="text-gray-500 mb-6">
+        <Card className="p-8 sm:p-12 text-center">
+          <ShoppingCart className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Orders Found</h3>
+          <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
             {searchTerm || statusFilter !== 'ALL'
               ? 'Try adjusting your search criteria or filters'
               : 'Get started by creating your first order'}
           </p>
           {!searchTerm && statusFilter === 'ALL' && (
-            <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-2" />
               Create Order
             </Button>
           )}
         </Card>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3 sm:space-y-4">
           {orders.map((order) => (
             <Card key={order.id} className="hover:shadow-md transition-shadow duration-200">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-6">
+              <CardContent className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-6">
                     <div>
                       <h3 className="font-semibold text-gray-900">{order.orderNumber}</h3>
                       <p className="text-sm text-gray-600">
@@ -371,7 +371,7 @@ export default function OrdersPage() {
                       </p>
                     </div>
 
-                    <div className="flex items-center space-x-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4 text-gray-400" />
                         <span className="text-sm text-gray-600">
@@ -394,7 +394,7 @@ export default function OrdersPage() {
                       {order.deliveryPerson && (
                         <div className="flex items-center gap-2">
                           <Truck className="w-4 h-4 text-gray-400" />
-                          <span className="text-sm text-gray-600">
+                          <span className="text-sm text-gray-600 truncate">
                             {order.deliveryPerson.firstName} {order.deliveryPerson.lastName}
                           </span>
                         </div>
@@ -402,12 +402,12 @@ export default function OrdersPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                     <Select
                       value={order.status}
                       onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
                     >
-                      <SelectTrigger className="w-36">
+                      <SelectTrigger className="w-full sm:w-36">
                         <SelectValue>
                           <Badge className={statusColors[order.status] || 'bg-gray-100 text-gray-800'}>
                             {order.status.replace('_', ' ')}
@@ -422,13 +422,15 @@ export default function OrdersPage() {
                       </SelectContent>
                     </Select>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 w-full sm:w-auto">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => handleViewOrder(order)}
+                        className="flex-1 sm:flex-none"
                       >
                         <Eye className="w-4 h-4" />
+                        <span className="ml-1 sm:hidden">View</span>
                       </Button>
 
                       {order.status === 'PENDING' && (
@@ -436,17 +438,18 @@ export default function OrdersPage() {
                           size="sm"
                           variant="outline"
                           onClick={() => handleDeleteOrder(order)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 flex-1 sm:flex-none"
                         >
                           <Trash2 className="w-4 h-4" />
+                          <span className="ml-1 sm:hidden">Delete</span>
                         </Button>
                       )}
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-100">
-                  <p className="text-sm text-gray-600 truncate">
+                <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-100">
+                  <p className="text-xs sm:text-sm text-gray-600 truncate">
                     <strong>Delivery Address:</strong> {order.deliveryAddress}
                   </p>
                 </div>
@@ -458,16 +461,18 @@ export default function OrdersPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
           <Button
             variant="outline"
+            size="sm"
             onClick={() => fetchOrders(currentPage - 1, searchTerm, statusFilter)}
             disabled={currentPage === 1 || isLoading}
+            className="w-full sm:w-auto"
           >
             Previous
           </Button>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 overflow-x-auto">
             {[...Array(totalPages)].map((_, index) => {
               const page = index + 1;
               if (
@@ -478,15 +483,17 @@ export default function OrdersPage() {
                 return (
                   <Button
                     key={page}
+                    size="sm"
                     variant={currentPage === page ? "default" : "outline"}
                     onClick={() => fetchOrders(page, searchTerm, statusFilter)}
                     disabled={isLoading}
+                    className="min-w-[40px]"
                   >
                     {page}
                   </Button>
                 );
               } else if (page === currentPage - 2 || page === currentPage + 2) {
-                return <span key={page} className="px-2">...</span>;
+                return <span key={page} className="px-1 sm:px-2 text-sm">...</span>;
               }
               return null;
             })}
@@ -494,8 +501,10 @@ export default function OrdersPage() {
 
           <Button
             variant="outline"
+            size="sm"
             onClick={() => fetchOrders(currentPage + 1, searchTerm, statusFilter)}
             disabled={currentPage === totalPages || isLoading}
+            className="w-full sm:w-auto"
           >
             Next
           </Button>

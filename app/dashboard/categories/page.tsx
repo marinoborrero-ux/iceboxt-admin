@@ -138,17 +138,17 @@ export default function CategoriesPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <Folder className="w-8 h-8 text-blue-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+            <Folder className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
             Category Management
           </h1>
-          <p className="text-gray-600 mt-1">Organize your products with categories</p>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Organize your products with categories</p>
         </div>
         
-        <Button onClick={handleCreateCategory} className="bg-blue-600 hover:bg-blue-700">
+        <Button onClick={handleCreateCategory} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Category
         </Button>
@@ -156,19 +156,19 @@ export default function CategoriesPage() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex gap-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search categories by name or description..."
+                placeholder="Search categories..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
                 className="pl-10"
               />
             </div>
-            <Button onClick={handleSearch} variant="outline">
+            <Button onClick={handleSearch} variant="outline" className="w-full sm:w-auto">
               Search
             </Button>
           </div>
@@ -177,7 +177,7 @@ export default function CategoriesPage() {
 
       {/* Categories Grid */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {[...Array(8)].map((_, i) => (
             <Card key={i} className="animate-pulse">
               <CardContent className="p-6">

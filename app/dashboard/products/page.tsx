@@ -34,7 +34,7 @@ export default function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   // Modal states
   const [showProductModal, setShowProductModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -145,17 +145,17 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
-            <Package className="w-8 h-8 text-blue-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3">
+            <Package className="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" />
             Product Management
           </h1>
-          <p className="text-gray-600 mt-1">Manage your product catalog and inventory</p>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">Manage your product catalog and inventory</p>
         </div>
-        
-        <Button onClick={handleCreateProduct} className="bg-blue-600 hover:bg-blue-700">
+
+        <Button onClick={handleCreateProduct} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-2" />
           Add Product
         </Button>
@@ -163,19 +163,19 @@ export default function ProductsPage() {
 
       {/* Search and Filters */}
       <Card>
-        <CardContent className="p-6">
-          <div className="flex gap-4">
+        <CardContent className="p-4 sm:p-6">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="Search products by name or description..."
+                placeholder="Search products..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={handleKeyPress}
                 className="pl-10"
               />
             </div>
-            <Button onClick={handleSearch} variant="outline">
+            <Button onClick={handleSearch} variant="outline" className="w-full sm:w-auto">
               Search
             </Button>
           </div>
@@ -184,11 +184,11 @@ export default function ProductsPage() {
 
       {/* Products Grid */}
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {[...Array(8)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-4">
-                <div className="aspect-video bg-gray-200 rounded-lg mb-4"></div>
+              <CardContent className="p-3 sm:p-4">
+                <div className="aspect-video bg-gray-200 rounded-lg mb-3 sm:mb-4"></div>
                 <div className="space-y-2">
                   <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                   <div className="h-3 bg-gray-200 rounded w-1/2"></div>
@@ -199,21 +199,21 @@ export default function ProductsPage() {
           ))}
         </div>
       ) : products.length === 0 ? (
-        <Card className="p-12 text-center">
-          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-600 mb-2">No Products Found</h3>
-          <p className="text-gray-500 mb-6">
+        <Card className="p-8 sm:p-12 text-center">
+          <Package className="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-base sm:text-lg font-semibold text-gray-600 mb-2">No Products Found</h3>
+          <p className="text-sm sm:text-base text-gray-500 mb-4 sm:mb-6">
             {searchTerm ? 'Try adjusting your search criteria' : 'Get started by adding your first product'}
           </p>
           {!searchTerm && (
-            <Button onClick={handleCreateProduct} className="bg-blue-600 hover:bg-blue-700">
+            <Button onClick={handleCreateProduct} className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto">
               <Plus className="w-4 h-4 mr-2" />
               Add Product
             </Button>
           )}
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {products.map((product) => (
             <Card key={product.id} className="group hover:shadow-lg transition-shadow duration-200">
               <CardContent className="p-0">
@@ -225,47 +225,47 @@ export default function ProductsPage() {
                         alt={product.name}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     </div>
                   ) : (
                     <div className="flex items-center justify-center h-full bg-gray-50">
-                      <ImageIcon className="w-12 h-12 text-gray-400" />
+                      <ImageIcon className="w-8 h-8 sm:w-12 sm:h-12 text-gray-400" />
                     </div>
                   )}
-                  
+
                   <div className="absolute top-2 right-2 flex gap-1">
-                    <Badge variant={product.isActive ? "default" : "secondary"}>
+                    <Badge variant={product.isActive ? "default" : "secondary"} className="text-xs">
                       {product.isActive ? "Active" : "Inactive"}
                     </Badge>
                   </div>
                 </div>
 
-                <div className="p-4">
+                <div className="p-3 sm:p-4">
                   <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-semibold text-sm sm:text-base text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
                       {product.name}
                     </h3>
                   </div>
 
                   {product.description && (
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-600 mb-3 line-clamp-2">
                       {product.description}
                     </p>
                   )}
 
-                  <div className="space-y-2 mb-4">
+                  <div className="space-y-2 mb-3 sm:mb-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-blue-600">
+                      <span className="text-base sm:text-lg font-bold text-blue-600">
                         ${product.price}
                       </span>
-                      <Badge variant="outline">
+                      <Badge variant="outline" className="text-xs">
                         Stock: {product.stock}
                       </Badge>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <span>{product.category.name}</span>
+                    <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500">
+                      <span className="truncate">{product.category.name}</span>
                       <span>{product.salesCount} sold</span>
                     </div>
                   </div>
@@ -274,19 +274,19 @@ export default function ProductsPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      className="flex-1"
+                      className="flex-1 text-xs sm:text-sm"
                       onClick={() => handleEditProduct(product)}
                     >
-                      <Edit className="w-4 h-4 mr-1" />
+                      <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                       Edit
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => handleDeleteProduct(product)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 px-2 sm:px-3"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
                     </Button>
                   </div>
                 </div>
@@ -298,16 +298,18 @@ export default function ProductsPage() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex justify-center gap-2">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
           <Button
             variant="outline"
+            size="sm"
             onClick={() => fetchProducts(currentPage - 1)}
             disabled={currentPage === 1 || isLoading}
+            className="w-full sm:w-auto"
           >
             Previous
           </Button>
-          
-          <div className="flex items-center gap-1">
+
+          <div className="flex items-center gap-1 overflow-x-auto">
             {[...Array(totalPages)].map((_, index) => {
               const page = index + 1;
               if (
@@ -318,15 +320,17 @@ export default function ProductsPage() {
                 return (
                   <Button
                     key={page}
+                    size="sm"
                     variant={currentPage === page ? "default" : "outline"}
                     onClick={() => fetchProducts(page)}
                     disabled={isLoading}
+                    className="min-w-[40px]"
                   >
                     {page}
                   </Button>
                 );
               } else if (page === currentPage - 2 || page === currentPage + 2) {
-                return <span key={page} className="px-2">...</span>;
+                return <span key={page} className="px-1 sm:px-2 text-sm">...</span>;
               }
               return null;
             })}
@@ -334,8 +338,10 @@ export default function ProductsPage() {
 
           <Button
             variant="outline"
+            size="sm"
             onClick={() => fetchProducts(currentPage + 1)}
             disabled={currentPage === totalPages || isLoading}
+            className="w-full sm:w-auto"
           >
             Next
           </Button>

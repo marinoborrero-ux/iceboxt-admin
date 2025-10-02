@@ -77,16 +77,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+          <p className="text-sm sm:text-base text-gray-600 mt-1">
             Welcome to your IceBoxT administration dashboard
           </p>
           {lastUpdated && (
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
               Last updated: {lastUpdated.toLocaleString()}
             </p>
           )}
@@ -94,7 +94,7 @@ export default function DashboardPage() {
         <Button
           onClick={handleRefresh}
           variant="outline"
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 w-full sm:w-auto"
           disabled={isLoading}
         >
           <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
@@ -108,8 +108,8 @@ export default function DashboardPage() {
           <StatsCards stats={stats} />
 
           {/* Charts Section */}
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold text-gray-900">Analytics & Insights</h2>
+          <div className="space-y-4 sm:space-y-6">
+            <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold text-gray-900">Analytics & Insights</h2>
             <DashboardCharts
               ordersByStatus={stats.ordersByStatus}
               topProducts={stats.topProducts}
