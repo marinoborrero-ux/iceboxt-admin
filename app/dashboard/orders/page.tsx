@@ -69,7 +69,7 @@ export default function OrdersPage() {
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  
+
   // Modal states
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -254,21 +254,10 @@ export default function OrdersPage() {
           <p className="text-gray-600 mt-1">Track and manage customer orders</p>
         </div>
         
-        <div className="flex items-center gap-2">
-          <Button 
-            onClick={() => fetchOrders(currentPage, searchTerm, statusFilter)} 
-            variant="outline"
-            size="icon"
-            className="hover:bg-gray-50"
-          >
-            <RefreshCw className="w-4 h-4" />
-          </Button>
-          
-          <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
-            <Plus className="w-4 h-4 mr-2" />
-            Create Order
-          </Button>
-        </div>
+        <Button onClick={handleCreateOrder} className="bg-blue-600 hover:bg-blue-700">
+          <Plus className="w-4 h-4 mr-2" />
+          Create Order
+        </Button>
       </div>
 
       {/* Search and Filters */}
@@ -285,7 +274,7 @@ export default function OrdersPage() {
                 className="pl-10"
               />
             </div>
-            
+
             <Select value={statusFilter} onValueChange={handleStatusFilter}>
               <SelectTrigger className="w-48">
                 <SelectValue />
@@ -328,8 +317,8 @@ export default function OrdersPage() {
           <ShoppingCart className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-semibold text-gray-600 mb-2">No Orders Found</h3>
           <p className="text-gray-500 mb-6">
-            {searchTerm || statusFilter !== 'ALL' 
-              ? 'Try adjusting your search criteria or filters' 
+            {searchTerm || statusFilter !== 'ALL'
+              ? 'Try adjusting your search criteria or filters'
               : 'Get started by creating your first order'}
           </p>
           {!searchTerm && statusFilter === 'ALL' && (
@@ -385,8 +374,8 @@ export default function OrdersPage() {
                   </div>
 
                   <div className="flex items-center space-x-4">
-                    <Select 
-                      value={order.status} 
+                    <Select
+                      value={order.status}
                       onValueChange={(value) => handleUpdateOrderStatus(order.id, value)}
                     >
                       <SelectTrigger className="w-36">
@@ -412,7 +401,7 @@ export default function OrdersPage() {
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
-                      
+
                       {order.status === 'PENDING' && (
                         <Button
                           size="sm"
@@ -448,7 +437,7 @@ export default function OrdersPage() {
           >
             Previous
           </Button>
-          
+
           <div className="flex items-center gap-1">
             {[...Array(totalPages)].map((_, index) => {
               const page = index + 1;
@@ -529,7 +518,7 @@ export default function OrdersPage() {
                 <h4 className="font-semibold mb-2">Order Information</h4>
                 <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                   <p><strong>Order Number:</strong> {orderDetails.orderNumber}</p>
-                  <p><strong>Status:</strong> 
+                  <p><strong>Status:</strong>
                     <Badge className={`ml-2 ${statusColors[orderDetails.status] || 'bg-gray-100 text-gray-800'}`}>
                       {orderDetails.status.replace('_', ' ')}
                     </Badge>
