@@ -3,6 +3,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +23,7 @@ interface Category {
 }
 
 export default function CategoriesPage() {
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -137,6 +139,10 @@ export default function CategoriesPage() {
     fetchCategories(currentPage);
   };
 
+  const viewCategoryProducts = (category: Category) => {
+    router.push(`/dashboard/products?category=${category.id}&categoryName=${encodeURIComponent(category.name)}`);
+  };
+
   return (
     <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -243,25 +249,40 @@ export default function CategoriesPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-2 mt-6">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => handleEditCategory(category)}
-                  >
-                    <Edit className="w-4 h-4 mr-1" />
-                    Edit
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleDeleteCategory(category)}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    disabled={category.productCount > 0}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div className="space-y-2 mt-6">
+                  {/* First row - View Products button (full width) */}
+                  {category.productCount > 0 && (
+                    <Button
+                      size="sm"
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      onClick={() => viewCategoryProducts(category)}
+                    >
+                      <Package className="w-4 h-4 mr-2" />
+                      View {category.productCount} Products
+                    </Button>
+                  )}
+
+                  {/* Second row - Edit and Delete buttons */}
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex-1"
+                      onClick={() => handleEditCategory(category)}
+                    >
+                      <Edit className="w-4 h-4 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDeleteCategory(category)}
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                      disabled={category.productCount > 0}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
 
                 {category.productCount > 0 && (
