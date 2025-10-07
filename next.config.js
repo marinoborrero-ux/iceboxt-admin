@@ -21,6 +21,7 @@ const nextConfig = {
     domains: [
       'localhost',
       'images.unsplash.com',
+      'unsplash.com',
       'www.dessertnowdinnerlater.com',
       'via.placeholder.com',
       'picsum.photos'
@@ -28,10 +29,22 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: '**',
       },
     ],
-    unoptimized: process.env.NODE_ENV === 'production',
+    unoptimized: false,
   },
   // Webpack configuration for path resolution
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

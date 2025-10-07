@@ -252,7 +252,7 @@ export default function ProductsPage() {
                   {product.image ? (
                     <div className="relative w-full h-full bg-muted">
                       <Image
-                        src={product.image.startsWith('/') ? product.image : `/${product.image}`}
+                        src={product.image.startsWith('http') || product.image.startsWith('/') ? product.image : `/${product.image}`}
                         alt={product.name}
                         fill
                         className="object-cover"
