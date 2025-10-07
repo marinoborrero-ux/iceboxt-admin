@@ -3,11 +3,18 @@ import { prisma } from '@/lib/db';
 
 export async function GET(request: NextRequest) {
     try {
+        // Obtener fecha de hace 7 días para filtrar órdenes muy antiguas
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
         // Obtener órdenes con estado 'PENDING'
         const availableOrders = await prisma.order.findMany({
             where: {
                 status: 'PENDING',
                 deliveryPersonId: null, // No asignadas a ningún driver
+                createdAt: {
+                    gte: sevenDaysAgo // Solo órdenes de los últimos 7 días
+                }
             },
             include: {
                 customer: {
