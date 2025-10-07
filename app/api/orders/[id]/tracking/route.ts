@@ -12,7 +12,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         if (!id) {
             return NextResponse.json(
                 { message: 'Order ID is required' },
-                { 
+                {
                     status: 400,
                     headers: {
                         'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
@@ -26,8 +26,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
         console.log('🔍 Tracking request for order:', id);
 
-        // Buscar la orden básica primero
-        const order = await prisma.order.findUnique({
+        // Buscar la orden primero por ID, luego por número de orden
+        let order = await prisma.order.findUnique({
             where: { id },
             select: {
                 id: true,
@@ -41,10 +41,38 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             }
         });
 
+        // Si no se encuentra por ID, intentar por número de orden
         if (!order) {
+            console.log('🔍 Order not found by ID, trying by orderNumber:', id);
+            order = await prisma.order.findUnique({
+                where: { orderNumber: id },
+                select: {
+                    id: true,
+                    orderNumber: true,
+                    status: true,
+                    deliveryAddress: true,
+                    notes: true,
+                    createdAt: true,
+                    deliveryPersonId: true,
+                    customerId: true
+                }
+            });
+        }
+
+        if (order) {
+            console.log('✅ Order found:', {
+                id: order.id,
+                orderNumber: order.orderNumber,
+                status: order.status,
+                hasDriver: !!order.deliveryPersonId
+            });
+        }
+
+        if (!order) {
+            console.log('❌ Order not found with ID or orderNumber:', id);
             return NextResponse.json(
                 { message: 'Order not found' },
-                { 
+                {
                     status: 404,
                     headers: {
                         'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
