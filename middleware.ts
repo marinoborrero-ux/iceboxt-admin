@@ -9,8 +9,10 @@ export default withAuth(
 
     // Debug logging for mobile API access
     if (pathname.startsWith('/api/orders/mobile') ||
+      pathname.startsWith('/api/orders/') ||
       pathname.startsWith('/api/products/mobile') ||
-      pathname.startsWith('/api/payments/stripe')) {
+      pathname.startsWith('/api/payments/stripe') ||
+      pathname.startsWith('/api/drivers')) {
       console.log('🔍 MOBILE API ACCESS:', pathname);
       console.log('📱 User-Agent:', req.headers.get('user-agent') || 'Unknown');
       console.log('🔑 Has token:', !!token);
@@ -31,8 +33,10 @@ export default withAuth(
       (pathname.startsWith('/api') &&
         !pathname.startsWith('/api/auth') &&
         !pathname.startsWith('/api/orders/mobile') &&
+        !pathname.startsWith('/api/orders/') &&
         !pathname.startsWith('/api/products/mobile') &&
-        !pathname.startsWith('/api/payments/stripe'))) {
+        !pathname.startsWith('/api/payments/stripe') &&
+        !pathname.startsWith('/api/drivers'))) {
       if (!token || token.role !== 'admin') {
         return NextResponse.redirect(new URL('/auth/signin', req.url));
       }
@@ -59,6 +63,6 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/((?!api/auth|api/orders/mobile|api/products/mobile|api/payments/stripe|_next/static|_next/image|favicon.ico|auth/signin|auth/signup).*)',
+    '/((?!api/auth|api/orders|api/products/mobile|api/payments/stripe|api/drivers|_next/static|_next/image|favicon.ico|auth/signin|auth/signup).*)',
   ],
 };
