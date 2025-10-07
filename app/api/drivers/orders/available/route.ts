@@ -8,7 +8,7 @@ export const revalidate = 0;
 export async function GET(request: NextRequest) {
     try {
         console.log('🔍 [AVAILABLE ORDERS] API call received at:', new Date().toISOString());
-        
+
         // Obtener fecha de hace 7 días para filtrar órdenes muy antiguas
         const sevenDaysAgo = new Date();
         sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
         });
 
         console.log(`📦 Found ${availableOrders.length} available orders in database`);
-        
+
         // Debug: mostrar IDs y status de todas las órdenes encontradas
         availableOrders.forEach((order, index) => {
             console.log(`   ${index + 1}. Order ${order.orderNumber} (${order.id}) - Status: ${order.status} - Driver: ${order.deliveryPersonId || 'none'}`);
