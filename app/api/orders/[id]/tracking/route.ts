@@ -114,6 +114,9 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                     vehicleColor: true,
                     rating: true,
                     isOnline: true,
+                    currentLatitude: true,
+                    currentLongitude: true,
+                    lastLocationUpdate: true,
                     updatedAt: true // Include timestamp for freshness verification
                 }
             });
@@ -121,6 +124,11 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             if (deliveryPerson) {
                 console.log('📍 Driver data fetched at:', new Date().toISOString());
                 console.log('📍 Driver last updated:', deliveryPerson.updatedAt);
+                console.log('📍 Driver coordinates from DB:', {
+                    latitude: deliveryPerson.currentLatitude,
+                    longitude: deliveryPerson.currentLongitude,
+                    lastLocationUpdate: deliveryPerson.lastLocationUpdate
+                });
                 
                 driver = {
                     id: deliveryPerson.id,
@@ -134,16 +142,17 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                     rating: parseFloat(deliveryPerson.rating.toString()),
                     isOnline: deliveryPerson.isOnline,
                     location: {
-                        latitude: 25.7617, // Default Miami location for now
-                        longitude: -80.1918,
-                        lastUpdate: new Date()
+                        latitude: deliveryPerson.currentLatitude,
+                        longitude: deliveryPerson.currentLongitude,
+                        lastUpdate: deliveryPerson.lastLocationUpdate || new Date()
                     }
                 };
                 console.log('📍 Driver info:', {
                     name: driver.name,
                     phone: driver.phone,
                     isOnline: driver.isOnline,
-                    vehicle: driver.vehicle
+                    vehicle: driver.vehicle,
+                    realLocation: driver.location
                 });
             }
         }

@@ -8,9 +8,9 @@ export const revalidate = 0;
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
     try {
         const orderId = params.id;
-        
+
         console.log(`🔍 [DEBUG ORDER] Checking order ${orderId} at:`, new Date().toISOString());
-        
+
         // Buscar la orden en la base de datos
         const order = await prisma.order.findUnique({
             where: { id: orderId },
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
         // Verificar si aparecería en available orders
         const wouldAppearInAvailable = order.status === 'PENDING' && order.deliveryPersonId === null;
-        
+
         const response = NextResponse.json({
             success: true,
             order: {
