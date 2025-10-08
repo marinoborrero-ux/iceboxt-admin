@@ -49,7 +49,6 @@ export async function GET(request: NextRequest) {
             id: category.id,
             name: category.name,
             description: category.description,
-            image: category.image,
             isActive: category.isActive,
             productCount: category._count.products,
             createdAt: category.createdAt,
