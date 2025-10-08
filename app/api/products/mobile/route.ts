@@ -10,9 +10,11 @@ export async function GET(request: NextRequest) {
     try {
         const { searchParams } = new URL(request.url);
         const category = searchParams.get('category') || '';
+        const all = searchParams.get('all') === 'true';
+        const search = searchParams.get('search') || searchParams.get('q') || '';
         const apiKey = request.headers.get('x-api-key') || searchParams.get('api_key');
 
-        console.log('🍔 Mobile API: Getting products for category:', category);
+        console.log('🍔 Mobile API: Getting products for category:', category, 'all:', all, 'search:', search);
         console.log('🔑 API Key provided:', !!apiKey);
 
         // Validate API key if provided (optional but recommended)
@@ -23,30 +25,62 @@ export async function GET(request: NextRequest) {
             }, { status: 401 });
         }
 
-        if (!category) {
-            return NextResponse.json({
-                error: 'Category parameter is required'
-            }, { status: 400 });
-        }
+        let whereClause: any = {
+            isActive: true
+        };
 
-        // Get products by category name
-        const products = await prisma.product.findMany({
-            where: {
-                category: {
+        // Handle search functionality
+        if (search && search.trim().length > 0) {
+            const searchQuery = search.trim();
+            whereClause.OR = [
+                {
                     name: {
-                        equals: category,
+                        contains: searchQuery,
                         mode: 'insensitive'
                     }
                 },
-                isActive: true
-            },
+                {
+                    description: {
+                        contains: searchQuery,
+                        mode: 'insensitive'
+                    }
+                },
+                {
+                    category: {
+                        name: {
+                            contains: searchQuery,
+                            mode: 'insensitive'
+                        }
+                    }
+                }
+            ];
+        } else if (!all) {
+            // If not searching and not getting all, filter by category
+            if (!category) {
+                return NextResponse.json({
+                    error: 'Category parameter is required (or use ?all=true for all products, or ?search=query for search)'
+                }, { status: 400 });
+            }
+
+            whereClause.category = {
+                name: {
+                    equals: category,
+                    mode: 'insensitive'
+                }
+            };
+        }
+
+        // Get products by category name, search query, or all products
+        const products = await prisma.product.findMany({
+            where: whereClause,
             include: {
                 category: true
             },
-            orderBy: { name: 'asc' }
+            orderBy: { name: 'asc' },
+            take: search ? 50 : undefined // Limit search results
         });
 
-        console.log(`📱 Found ${products.length} products for category: ${category}`);
+        console.log(`📱 Found ${products.length} products${search ? ` for search: "${search}"` : all ? ' (all)' : ` for category: ${category}`}`);
 
         // Format products for mobile app
         const formattedProducts = products.map(product => ({
@@ -64,7 +98,9 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
             success: true,
             data: formattedProducts,
-            count: formattedProducts.length
+            products: formattedProducts, // Also include as 'products' for search compatibility
+            count: formattedProducts.length,
+            query: search || undefined
         });
 
     } catch (error) {

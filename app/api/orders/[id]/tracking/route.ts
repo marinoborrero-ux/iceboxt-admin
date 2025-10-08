@@ -36,7 +36,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
         // Force fresh data from database - no query caching
         console.log('📊 Executing fresh database query...');
-        
+
         // Buscar la orden primero por ID, luego por número de orden
         let order = await prisma.order.findUnique({
             where: { id },
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         let driver = null;
         if (order.deliveryPersonId) {
             console.log('🚗 Fetching fresh driver data for:', order.deliveryPersonId);
-            
+
             const deliveryPerson = await prisma.deliveryPerson.findUnique({
                 where: { id: order.deliveryPersonId },
                 select: {
@@ -129,7 +129,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                     longitude: deliveryPerson.currentLongitude,
                     lastLocationUpdate: deliveryPerson.lastLocationUpdate
                 });
-                
+
                 driver = {
                     id: deliveryPerson.id,
                     name: `${deliveryPerson.firstName} ${deliveryPerson.lastName}`,
@@ -159,7 +159,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 
         // Buscar información del cliente - FRESH DATA
         console.log('👤 Fetching fresh customer data for:', order.customerId);
-        
+
         const customer = await prisma.customer.findUnique({
             where: { id: order.customerId },
             select: {
@@ -223,7 +223,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     } catch (error) {
         const errorTimestamp = new Date().toISOString();
         console.error(`❌ [${errorTimestamp}] Error fetching order tracking info:`, error);
-        
+
         const errorResponse = NextResponse.json(
             {
                 success: false,
@@ -231,7 +231,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                 error: error instanceof Error ? error.message : 'Unknown error',
                 timestamp: errorTimestamp
             },
-            { 
+            {
                 status: 500,
                 headers: {
                     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
@@ -247,7 +247,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
                 }
             }
         );
-        
+
         return errorResponse;
     }
 }

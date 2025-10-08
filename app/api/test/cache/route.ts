@@ -7,9 +7,9 @@ export const fetchCache = 'force-no-store';
 
 export async function GET(request: NextRequest) {
     const timestamp = new Date().toISOString();
-    
+
     console.log(`🧪 [${timestamp}] Cache test endpoint called`);
-    
+
     const response = NextResponse.json({
         message: 'Cache test endpoint',
         timestamp: timestamp,
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
             pragma: request.headers.get('pragma')
         }
     });
-    
+
     // Set comprehensive anti-cache headers
     response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0, s-maxage=0');
     response.headers.set('Pragma', 'no-cache');
@@ -34,6 +34,6 @@ export async function GET(request: NextRequest) {
     response.headers.set('X-Fresh-Data', 'true');
     response.headers.set('X-Timestamp', timestamp);
     response.headers.set('X-Test-Mode', 'no-cache');
-    
+
     return response;
 }
