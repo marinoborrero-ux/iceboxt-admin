@@ -62,6 +62,18 @@ export async function GET(request: NextRequest) {
 
     console.log('🔍 Database query where clause:', JSON.stringify(where, null, 2));
 
+    // Primero, limpiar items huérfanos usando SQL directo
+    try {
+      console.log('🧹 Cleaning up orphan order items...');
+      const result = await prisma.$executeRaw`
+        DELETE FROM "order_items" 
+        WHERE "product_id" NOT IN (SELECT "id" FROM "products")
+      `;
+      console.log(`✅ Cleaned up ${result} orphan order items`);
+    } catch (cleanupError) {
+      console.log('⚠️ Cleanup failed, continuing with query:', cleanupError);
+    }
+
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
         where,
@@ -101,12 +113,19 @@ export async function GET(request: NextRequest) {
 
     console.log(`📊 Found ${orders.length} orders out of ${total} total`);
 
-    const ordersWithDetails = orders.map(order => ({
-      ...order,
-      total: Number(order.total),
-      itemCount: order.items.length,
-      createdAt: order.createdAt.toISOString(),
-    }));
+    // Filtrar y procesar órdenes, manejando items sin productos
+    const ordersWithDetails = orders.map(order => {
+      // Filtrar items que tienen productos válidos
+      const validItems = order.items.filter(item => item.product !== null);
+      
+      return {
+        ...order,
+        total: Number(order.total),
+        itemCount: validItems.length,
+        createdAt: order.createdAt.toISOString(),
+        items: validItems, // Solo incluir items válidos
+      };
+    });
 
     console.log('✅ Orders processed successfully');
 

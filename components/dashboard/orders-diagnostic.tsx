@@ -23,7 +23,34 @@ interface DiagnosticData {
 export default function OrdersDiagnostic() {
   const [diagnosticData, setDiagnosticData] = useState<DiagnosticData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCleaningUp, setIsCleaningUp] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
+
+  const runCleanup = async () => {
+    setIsCleaningUp(true);
+    try {
+      const response = await fetch('/api/cleanup', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        console.log('🧹 Cleanup successful:', data);
+        alert(`Cleanup completed!\nDeleted ${data.actions.deletedOrphanItems} orphan items\nFound ${data.actions.foundEmptyOrders} empty orders`);
+        // Re-run diagnostic after cleanup
+        runDiagnostic();
+      } else {
+        console.error('❌ Cleanup failed:', data);
+        alert('Cleanup failed: ' + data.details);
+      }
+    } catch (error) {
+      console.error('❌ Cleanup failed:', error);
+      alert('Cleanup failed: ' + error);
+    } finally {
+      setIsCleaningUp(false);
+    }
+  };
 
   const runDiagnostic = async () => {
     setIsLoading(true);
@@ -95,6 +122,20 @@ export default function OrdersDiagnostic() {
               <RefreshCw className="h-4 w-4 mr-2" />
             )}
             Run Diagnostic
+          </Button>
+          
+          <Button 
+            onClick={runCleanup} 
+            disabled={isCleaningUp || isLoading}
+            size="sm"
+            variant="destructive"
+          >
+            {isCleaningUp ? (
+              <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              '🧹'
+            )}
+            Cleanup Database
           </Button>
           
           {diagnosticData && (
