@@ -9,9 +9,25 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔍 Orders API: Starting request');
+    
+    // Verificar conexión a la base de datos
+    try {
+      await prisma.$connect();
+      console.log('✅ Database connection successful');
+    } catch (dbError) {
+      console.error('❌ Database connection failed:', dbError);
+      return NextResponse.json(
+        { error: 'Database connection failed', details: dbError instanceof Error ? dbError.message : 'Unknown error' },
+        { status: 503 }
+      );
+    }
+
     const session = await getServerSession(authOptions);
+    console.log('🔐 Session check:', session ? 'Valid' : 'Invalid');
     
     if (!session || session.user.role !== 'admin') {
+      console.log('❌ Unauthorized access attempt');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -20,6 +36,8 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const search = searchParams.get('search') || '';
     const status = searchParams.get('status') || '';
+
+    console.log('📋 Query params:', { page, limit, search, status });
 
     const skip = (page - 1) * limit;
 
@@ -41,6 +59,8 @@ export async function GET(request: NextRequest) {
     if (status && status !== 'ALL') {
       where.status = status;
     }
+
+    console.log('🔍 Database query where clause:', JSON.stringify(where, null, 2));
 
     const [orders, total] = await Promise.all([
       prisma.order.findMany({
@@ -79,12 +99,16 @@ export async function GET(request: NextRequest) {
       prisma.order.count({ where }),
     ]);
 
+    console.log(`📊 Found ${orders.length} orders out of ${total} total`);
+
     const ordersWithDetails = orders.map(order => ({
       ...order,
       total: Number(order.total),
       itemCount: order.items.length,
       createdAt: order.createdAt.toISOString(),
     }));
+
+    console.log('✅ Orders processed successfully');
 
     return NextResponse.json({
       orders: ordersWithDetails,
@@ -93,9 +117,20 @@ export async function GET(request: NextRequest) {
       currentPage: page
     });
   } catch (error) {
-    console.error('Orders fetch error:', error);
+    console.error('❌ Orders fetch error:', error);
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
+    
+    // Más detalles del error para debugging
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorCode = error instanceof Error && 'code' in error ? (error as any).code : 'UNKNOWN';
+    
     return NextResponse.json(
-      { error: 'Failed to fetch orders' },
+      { 
+        error: 'Failed to fetch orders',
+        details: errorMessage,
+        code: errorCode,
+        timestamp: new Date().toISOString()
+      },
       { status: 500 }
     );
   }

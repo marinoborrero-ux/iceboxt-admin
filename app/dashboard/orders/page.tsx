@@ -8,11 +8,12 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ShoppingCart, Search, Filter, Eye, Truck, Calendar, DollarSign, Plus, Edit, Trash2, RefreshCw } from 'lucide-react';
+import { ShoppingCart, Search, Filter, Eye, Truck, Calendar, DollarSign, Plus, Edit, Trash2, RefreshCw, XCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import OrderModal from '@/components/dashboard/modals/order-modal';
 import ConfirmDeleteModal from '@/components/dashboard/modals/confirm-delete-modal';
+import OrdersDiagnostic from '@/components/dashboard/orders-diagnostic';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface Order {
@@ -65,6 +66,7 @@ const statusColors: Record<string, string> = {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
   const [currentPage, setCurrentPage] = useState(1);
@@ -100,6 +102,9 @@ export default function OrdersPage() {
   const fetchOrders = async (page = 1, search = searchTerm, status = statusFilter) => {
     try {
       setIsLoading(true);
+      setError(null);
+      console.log('🔍 Fetching orders with params:', { page, search, status });
+      
       const params = new URLSearchParams({
         page: page.toString(),
         limit: '10',
@@ -107,20 +112,57 @@ export default function OrdersPage() {
         status: status,
       });
 
-      const response = await fetch(`/api/orders?${params}`);
-      if (!response.ok) throw new Error('Failed to fetch orders');
+      const response = await fetch(`/api/orders?${params}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // Incluir cookies de sesión
+      });
+
+      console.log('📡 Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('❌ API Error:', errorData);
+        
+        let errorMessage = 'Failed to load orders';
+        if (response.status === 401) {
+          errorMessage = 'Authentication required. Please log in again.';
+        } else if (response.status === 403) {
+          errorMessage = 'Access denied. Admin privileges required.';
+        } else if (response.status === 503) {
+          errorMessage = 'Database connection error. Please try again later.';
+        } else if (errorData.details) {
+          errorMessage = `Error: ${errorData.details}`;
+        }
+        
+        setError(errorMessage);
+        throw new Error(errorMessage);
+      }
 
       const data = await response.json();
-      setOrders(data.orders);
-      setTotalPages(data.pages);
-      setCurrentPage(data.currentPage);
+      console.log('✅ Orders data received:', data);
+      
+      setOrders(data.orders || []);
+      setTotalPages(data.pages || 1);
+      setCurrentPage(data.currentPage || 1);
+      setError(null);
     } catch (error) {
       console.error('Error fetching orders:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Failed to load orders.';
+      setError(errorMessage);
+      
       toast({
         title: 'Error',
-        description: 'Failed to load orders.',
+        description: errorMessage,
         variant: 'destructive',
       });
+      
+      // En caso de error de autenticación, redirigir al login
+      if (error instanceof Error && error.message.includes('Authentication required')) {
+        window.location.href = '/auth/signin';
+      }
     } finally {
       setIsLoading(false);
     }
@@ -288,6 +330,48 @@ export default function OrdersPage() {
           </Button>
         </div>
       </div>
+
+      {/* System Diagnostic - Show when there are errors */}
+      {error && (
+        <>
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-3">
+                <XCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <h3 className="font-semibold text-red-800 mb-1">Error Loading Orders</h3>
+                  <p className="text-red-700 text-sm mb-3">{error}</p>
+                  <div className="flex gap-2">
+                    <Button 
+                      onClick={() => fetchOrders(currentPage, searchTerm, statusFilter)}
+                      size="sm"
+                      variant="outline"
+                      className="border-red-300 text-red-700 hover:bg-red-100"
+                    >
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Try Again
+                    </Button>
+                    <Button 
+                      onClick={() => window.location.href = '/auth/signin'}
+                      size="sm"
+                      variant="outline"
+                      className="border-red-300 text-red-700 hover:bg-red-100"
+                    >
+                      Login Again
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <OrdersDiagnostic />
+        </>
+      )}
+
+      {/* System Diagnostic - Show when no orders and no errors */}
+      {(!error && orders.length === 0 && !isLoading) && (
+        <OrdersDiagnostic />
+      )}
 
       {/* Search and Filters */}
       <Card>
