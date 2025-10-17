@@ -223,8 +223,8 @@ export default function CategoriesPage() {
                 <div className="flex items-start justify-between mb-3">
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center overflow-hidden">
                     {category.image ? (
-                      <img 
-                        src={category.image} 
+                      <img
+                        src={category.image}
                         alt={category.name}
                         className="w-full h-full object-cover"
                         onError={(e) => {

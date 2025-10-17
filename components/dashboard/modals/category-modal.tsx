@@ -58,7 +58,7 @@ export default function CategoryModal({ isOpen, onClose, onSave, category, mode 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       toast({
         title: 'Validation Error',
