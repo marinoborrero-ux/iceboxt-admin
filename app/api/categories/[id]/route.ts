@@ -55,7 +55,7 @@ export async function PUT(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { name, description, isActive } = await request.json();
+    const { name, description, image, isActive } = await request.json();
 
     if (!name) {
       return NextResponse.json(
@@ -69,6 +69,7 @@ export async function PUT(
       data: {
         name,
         description: description || null,
+        image: image || null,
         isActive: isActive !== false,
       },
       include: {

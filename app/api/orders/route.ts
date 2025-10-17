@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     console.log('🔍 Orders API: Starting request');
-    
+
     // Verificar conexión a la base de datos
     try {
       await prisma.$connect();
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
     const session = await getServerSession(authOptions);
     console.log('🔐 Session check:', session ? 'Valid' : 'Invalid');
-    
+
     if (!session || session.user.role !== 'admin') {
       console.log('❌ Unauthorized access attempt');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -42,17 +42,19 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     const where: any = {};
-    
+
     if (search) {
       where.OR = [
         { orderNumber: { contains: search, mode: 'insensitive' } },
-        { customer: { 
-          OR: [
-            { firstName: { contains: search, mode: 'insensitive' } },
-            { lastName: { contains: search, mode: 'insensitive' } },
-            { email: { contains: search, mode: 'insensitive' } }
-          ]
-        }}
+        {
+          customer: {
+            OR: [
+              { firstName: { contains: search, mode: 'insensitive' } },
+              { lastName: { contains: search, mode: 'insensitive' } },
+              { email: { contains: search, mode: 'insensitive' } }
+            ]
+          }
+        }
       ];
     }
 
@@ -117,7 +119,7 @@ export async function GET(request: NextRequest) {
     const ordersWithDetails = orders.map(order => {
       // Filtrar items que tienen productos válidos
       const validItems = order.items.filter(item => item.product !== null);
-      
+
       return {
         ...order,
         total: Number(order.total),
@@ -138,13 +140,13 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('❌ Orders fetch error:', error);
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
-    
+
     // Más detalles del error para debugging
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     const errorCode = error instanceof Error && 'code' in error ? (error as any).code : 'UNKNOWN';
-    
+
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch orders',
         details: errorMessage,
         code: errorCode,
@@ -158,7 +160,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    
+
     if (!session || session.user.role !== 'admin') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

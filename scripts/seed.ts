@@ -46,31 +46,37 @@ async function main() {
       {
         name: 'Ice Cream',
         description: 'Premium ice cream varieties',
+        image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',
         isActive: true,
       },
       {
         name: 'Frozen Yogurt',
         description: 'Healthy frozen yogurt options',
+        image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400',
         isActive: true,
       },
       {
         name: 'Gelato',
         description: 'Italian-style gelato',
+        image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?w=400',
         isActive: true,
       },
       {
         name: 'Sorbet',
         description: 'Dairy-free fruit sorbets',
+        image: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=400',
         isActive: true,
       },
       {
         name: 'Frozen Treats',
         description: 'Popsicles and frozen snacks',
+        image: 'https://images.unsplash.com/photo-1564298208969-f4a2b9133e9a?w=400',
         isActive: true,
       },
       {
         name: 'Ice Cream Cakes',
         description: 'Special occasion cakes',
+        image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400',
         isActive: true,
       },
     ],

@@ -17,6 +17,7 @@ interface Category {
   id: string;
   name: string;
   description: string;
+  image?: string;
   isActive: boolean;
   productCount: number;
   createdAt: string;
@@ -220,8 +221,22 @@ export default function CategoriesPage() {
             <Card key={category.id} className="group hover:shadow-lg transition-shadow duration-200">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-3">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                    <Folder className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center overflow-hidden">
+                    {category.image ? (
+                      <img 
+                        src={category.image} 
+                        alt={category.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                          const folderIcon = e.currentTarget.parentElement?.querySelector('.folder-icon') as HTMLElement;
+                          if (folderIcon) {
+                            folderIcon.style.display = 'flex';
+                          }
+                        }}
+                      />
+                    ) : null}
+                    <Folder className={`folder-icon w-6 h-6 text-blue-600 ${category.image ? 'hidden' : ''}`} />
                   </div>
                   <Badge variant={category.isActive ? "default" : "secondary"}>
                     {category.isActive ? "Active" : "Inactive"}

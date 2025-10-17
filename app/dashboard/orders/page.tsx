@@ -104,7 +104,7 @@ export default function OrdersPage() {
       setIsLoading(true);
       setError(null);
       console.log('🔍 Fetching orders with params:', { page, search, status });
-      
+
       const params = new URLSearchParams({
         page: page.toString(),
         limit: '10',
@@ -121,11 +121,11 @@ export default function OrdersPage() {
       });
 
       console.log('📡 Response status:', response.status);
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         console.error('❌ API Error:', errorData);
-        
+
         let errorMessage = 'Failed to load orders';
         if (response.status === 401) {
           errorMessage = 'Authentication required. Please log in again.';
@@ -136,14 +136,14 @@ export default function OrdersPage() {
         } else if (errorData.details) {
           errorMessage = `Error: ${errorData.details}`;
         }
-        
+
         setError(errorMessage);
         throw new Error(errorMessage);
       }
 
       const data = await response.json();
       console.log('✅ Orders data received:', data);
-      
+
       setOrders(data.orders || []);
       setTotalPages(data.pages || 1);
       setCurrentPage(data.currentPage || 1);
@@ -152,13 +152,13 @@ export default function OrdersPage() {
       console.error('Error fetching orders:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to load orders.';
       setError(errorMessage);
-      
+
       toast({
         title: 'Error',
         description: errorMessage,
         variant: 'destructive',
       });
-      
+
       // En caso de error de autenticación, redirigir al login
       if (error instanceof Error && error.message.includes('Authentication required')) {
         window.location.href = '/auth/signin';
@@ -342,7 +342,7 @@ export default function OrdersPage() {
                   <h3 className="font-semibold text-red-800 mb-1">Error Loading Orders</h3>
                   <p className="text-red-700 text-sm mb-3">{error}</p>
                   <div className="flex gap-2">
-                    <Button 
+                    <Button
                       onClick={() => fetchOrders(currentPage, searchTerm, statusFilter)}
                       size="sm"
                       variant="outline"
@@ -351,7 +351,7 @@ export default function OrdersPage() {
                       <RefreshCw className="w-4 h-4 mr-2" />
                       Try Again
                     </Button>
-                    <Button 
+                    <Button
                       onClick={() => window.location.href = '/auth/signin'}
                       size="sm"
                       variant="outline"

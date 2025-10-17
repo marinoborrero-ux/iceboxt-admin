@@ -14,6 +14,7 @@ interface Category {
   id?: string;
   name: string;
   description: string;
+  image?: string;
   isActive: boolean;
 }
 
@@ -29,6 +30,7 @@ export default function CategoryModal({ isOpen, onClose, onSave, category, mode 
   const [formData, setFormData] = useState<Category>({
     name: '',
     description: '',
+    image: '',
     isActive: true,
   });
   const [loading, setLoading] = useState(false);
@@ -40,12 +42,14 @@ export default function CategoryModal({ isOpen, onClose, onSave, category, mode 
         setFormData({
           name: category.name,
           description: category.description || '',
+          image: category.image || '',
           isActive: category.isActive,
         });
       } else {
         setFormData({
           name: '',
           description: '',
+          image: '',
           isActive: true,
         });
       }
@@ -137,6 +141,17 @@ export default function CategoryModal({ isOpen, onClose, onSave, category, mode 
               onChange={(e) => handleChange('description', e.target.value)}
               placeholder="Enter category description"
               rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="image">Image URL</Label>
+            <Input
+              id="image"
+              value={formData.image}
+              onChange={(e) => handleChange('image', e.target.value)}
+              placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
+              type="url"
             />
           </div>
 

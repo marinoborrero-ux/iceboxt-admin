@@ -21,6 +21,7 @@ export default function AddCategoryModal({ onCategoryAdded }: AddCategoryModalPr
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    image: '',
     isActive: true,
   });
   const { toast } = useToast();
@@ -46,7 +47,7 @@ export default function AddCategoryModal({ onCategoryAdded }: AddCategoryModalPr
         description: 'Category created successfully',
       });
 
-      setFormData({ name: '', description: '', isActive: true });
+      setFormData({ name: '', description: '', image: '', isActive: true });
       setOpen(false);
       onCategoryAdded();
     } catch (error: any) {
@@ -92,6 +93,17 @@ export default function AddCategoryModal({ onCategoryAdded }: AddCategoryModalPr
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Enter category description"
               rows={3}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="image">Image URL</Label>
+            <Input
+              id="image"
+              value={formData.image}
+              onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+              placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
+              type="url"
             />
           </div>
 
