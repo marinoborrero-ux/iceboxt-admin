@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const requiresAuth = searchParams.get('admin') === 'true'; // Admin features require auth
-    
+
     // Check authentication only for admin features
     if (requiresAuth) {
       const session = await getServerSession(authOptions);
