@@ -23,13 +23,13 @@ export async function GET(
     { params }: { params: { id: string } }
 ) {
     try {
-        console.log('🧪 TEST: Cancel order request (GET) for ID:', params.id);
+        console.log('🧪 TEST: Cancel order request (GET) for ID/Number:', params.id);
 
         const { searchParams } = new URL(request.url);
         const reason = searchParams.get('reason') || 'Cancelled via GET test endpoint';
 
-        // Find the order with customer information (NO EMAIL VALIDATION)
-        const order = await prisma.order.findUnique({
+        // Find the order by ID or order number (NO EMAIL VALIDATION)
+        let order = await prisma.order.findUnique({
             where: { id: params.id },
             include: {
                 customer: true,
@@ -41,14 +41,29 @@ export async function GET(
             }
         });
 
+        // If not found by ID, try to find by order number
+        if (!order) {
+            order = await prisma.order.findUnique({
+                where: { orderNumber: params.id },
+                include: {
+                    customer: true,
+                    items: {
+                        include: {
+                            product: true
+                        }
+                    }
+                }
+            });
+        }
+
         if (!order) {
             return NextResponse.json(
-                { 
+                {
                     success: false,
                     error: 'Order not found',
-                    testNote: 'Use a valid order ID'
+                    testNote: 'Use a valid order ID or order number (e.g., cm2abc123xyz or ORD-000123)'
                 },
-                { 
+                {
                     status: 404,
                     headers: corsHeaders
                 }
@@ -58,12 +73,12 @@ export async function GET(
         // Check if order can be cancelled (same business logic but no email validation)
         if (order.status === 'DELIVERED') {
             return NextResponse.json(
-                { 
+                {
                     success: false,
                     error: 'Cannot cancel order: Order has already been delivered',
                     testNote: 'Try with an order in PENDING or IN_PROGRESS status'
                 },
-                { 
+                {
                     status: 400,
                     headers: corsHeaders
                 }
@@ -72,12 +87,12 @@ export async function GET(
 
         if (order.status === 'CANCELLED') {
             return NextResponse.json(
-                { 
+                {
                     success: false,
                     error: 'Order is already cancelled',
                     testNote: 'This order was already cancelled'
                 },
-                { 
+                {
                     status: 400,
                     headers: corsHeaders
                 }
@@ -86,12 +101,12 @@ export async function GET(
 
         // Update order status to CANCELLED in a transaction (same logic as POST)
         const cancelledOrder = await prisma.$transaction(async (tx) => {
-            // Update order status
+            // Update order status (order is guaranteed to exist at this point)
             const updatedOrder = await tx.order.update({
-                where: { id: params.id },
+                where: { id: order!.id },
                 data: {
                     status: 'CANCELLED',
-                    notes: `${order.notes || ''}\n\nCANCELLED VIA GET TEST: ${reason}`.trim()
+                    notes: `${order!.notes || ''}\n\nCANCELLED VIA GET TEST: ${reason}`.trim()
                 },
                 include: {
                     customer: true,
@@ -104,7 +119,7 @@ export async function GET(
             });
 
             // Restore product stock for cancelled items
-            for (const item of order.items) {
+            for (const item of order!.items) {
                 await tx.product.update({
                     where: { id: item.productId },
                     data: {
@@ -120,11 +135,15 @@ export async function GET(
 
         console.log('✅ TEST: Order cancelled successfully:', cancelledOrder.id);
 
+        // Determine how the order was found
+        const foundBy = params.id === cancelledOrder.id ? 'ID' : 'Order Number';
+
         // Format response
         const response = {
             success: true,
             message: 'Order cancelled successfully (TEST MODE)',
             testNote: 'This was cancelled using the GET endpoint for testing. In production, use POST method with proper authentication.',
+            foundBy: `Order found by ${foundBy}: ${params.id}`,
             order: {
                 id: cancelledOrder.id,
                 orderNumber: cancelledOrder.orderNumber,
@@ -151,7 +170,8 @@ export async function GET(
                 }))
             },
             testUrls: {
-                testThisOrder: `${request.nextUrl.origin}/api/orders/${params.id}/cancel?reason=Test cancellation`,
+                testThisOrderById: `${request.nextUrl.origin}/api/orders/${cancelledOrder.id}/cancel?reason=Test by ID`,
+                testThisOrderByNumber: `${request.nextUrl.origin}/api/orders/${cancelledOrder.orderNumber}/cancel?reason=Test by order number`,
                 createTestOrder: `${request.nextUrl.origin}/api/test/create-test-order`,
                 viewAllOrders: `${request.nextUrl.origin}/api/orders/mobile`
             }
@@ -184,7 +204,7 @@ export async function POST(
     { params }: { params: { id: string } }
 ) {
     try {
-        console.log('📱 Cancel order request for ID:', params.id);
+        console.log('📱 Cancel order request for ID/Number:', params.id);
 
         const body = await request.json();
         const { customerEmail, reason } = body;
@@ -203,8 +223,8 @@ export async function POST(
             );
         }
 
-        // Find the order with customer information
-        const order = await prisma.order.findUnique({
+        // Find the order by ID or order number
+        let order = await prisma.order.findUnique({
             where: { id: params.id },
             include: {
                 customer: true,
@@ -215,6 +235,21 @@ export async function POST(
                 }
             }
         });
+
+        // If not found by ID, try to find by order number
+        if (!order) {
+            order = await prisma.order.findUnique({
+                where: { orderNumber: params.id },
+                include: {
+                    customer: true,
+                    items: {
+                        include: {
+                            product: true
+                        }
+                    }
+                }
+            });
+        }
 
         if (!order) {
             return NextResponse.json(
@@ -272,12 +307,12 @@ export async function POST(
 
         // Update order status to CANCELLED in a transaction
         const cancelledOrder = await prisma.$transaction(async (tx) => {
-            // Update order status
+            // Update order status (order is guaranteed to exist at this point)
             const updatedOrder = await tx.order.update({
-                where: { id: params.id },
+                where: { id: order!.id },
                 data: {
                     status: 'CANCELLED',
-                    notes: reason ? `${order.notes || ''}\n\nCANCELLED BY CUSTOMER: ${reason}`.trim() : `${order.notes || ''}\n\nCANCELLED BY CUSTOMER`.trim()
+                    notes: reason ? `${order!.notes || ''}\n\nCANCELLED BY CUSTOMER: ${reason}`.trim() : `${order!.notes || ''}\n\nCANCELLED BY CUSTOMER`.trim()
                 },
                 include: {
                     customer: true,
@@ -290,7 +325,7 @@ export async function POST(
             });
 
             // Restore product stock for cancelled items
-            for (const item of order.items) {
+            for (const item of order!.items) {
                 await tx.product.update({
                     where: { id: item.productId },
                     data: {
@@ -306,10 +341,14 @@ export async function POST(
 
         console.log('✅ Order cancelled successfully:', cancelledOrder.id);
 
+        // Determine how the order was found
+        const foundBy = params.id === cancelledOrder.id ? 'ID' : 'Order Number';
+
         // Format response
         const response = {
             success: true,
             message: 'Order cancelled successfully',
+            foundBy: `Order found by ${foundBy}: ${params.id}`,
             order: {
                 id: cancelledOrder.id,
                 orderNumber: cancelledOrder.orderNumber,
