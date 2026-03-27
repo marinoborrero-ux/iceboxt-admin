@@ -171,35 +171,6 @@ async function main() {
         isActive: true,
       },
       {
-        name: 'Salmon Teriyaki',
-        description: 'Teriyaki glazed salmon with vegetables',
-        price: 16.99,
-        stock: 35,
-        image: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400',
-        categoryId: mainCoursesCat.id,
-        isActive: true,
-      },
-      {
-        name: 'Pasta Primavera',
-        description: 'Pasta with seasonal vegetables',
-        price: 11.99,
-        stock: 40,
-        image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400',
-        categoryId: mainCoursesCat.id,
-        isActive: true,
-      },
-      {
-        name: 'Quinoa Bowl',
-        description: 'Healthy quinoa bowl with vegetables',
-        price: 10.49,
-        stock: 42,
-        image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
-        categoryId: mainCoursesCat.id,
-        isActive: true,
-      }
-
-      // Appetizers
-      {
         name: 'Bruschetta',
         description: 'Toasted bread with tomato and basil',
         price: 7.99,
@@ -283,7 +254,7 @@ async function main() {
         image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400',
         categoryId: beveragesCat.id,
         isActive: true,
-      }
+      },
 
       // Snacks
       {
@@ -312,7 +283,7 @@ async function main() {
         image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
         categoryId: snacksCat.id,
         isActive: true,
-      }
+      },
 
       // Meal Combos
       {
