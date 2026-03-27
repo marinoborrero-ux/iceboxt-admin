@@ -2,7 +2,7 @@
   "name": "iceboxt-admin",
   "version": "1.0.0",
   "private": true,
-  "description": "Sistema completo de administración para heladerías con CRUD de productos, categorías, clientes, personal de entrega y pedidos.",
+  "description": "Complete food management admin system with CRUD for products, categories, customers, delivery staff, and orders.",
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
@@ -23,7 +23,7 @@
     "prisma",
     "postgresql",
     "admin",
-    "ice-cream",
+    "food",
     "ecommerce"
   ],
   "author": "IceBoxT Team",

@@ -21,7 +21,7 @@ GET /api/categories
 ```http
 GET /api/categories
 GET /api/categories?page=2&limit=20
-GET /api/categories?search=ice cream
+GET /api/categories?search=food
 GET /api/categories?all=true
 ```
 
@@ -31,8 +31,8 @@ GET /api/categories?all=true
   "categories": [
     {
       "id": "cat_123",
-      "name": "Ice Cream",
-      "description": "Premium ice cream varieties",
+      "name": "Main Courses",
+      "description": "Popular food categories",
       "image": "https://images.unsplash.com/photo-123.jpg",
       "isActive": true,
       "createdAt": "2025-10-17T...",

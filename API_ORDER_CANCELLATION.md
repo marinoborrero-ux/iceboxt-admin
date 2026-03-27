@@ -71,8 +71,8 @@ X-User-Email: cliente@email.com (opcional)
         "price": 12.75,
         "product": {
           "id": "product_1",
-          "name": "Vanilla Ice Cream",
-          "description": "Premium vanilla ice cream"
+          "name": "Grilled Chicken Platter",
+          "description": "Seasoned grilled chicken with sides"
         }
       }
     ]

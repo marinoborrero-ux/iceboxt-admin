@@ -1,4 +1,4 @@
-# IceBoxT Admin - Sistema de Administración para Heladerías
+# IceBoxT Admin - Sistema de Administración para Comidas
 
 ## 🚀 Deployment en Render.com
 

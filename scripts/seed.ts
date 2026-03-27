@@ -44,38 +44,38 @@ async function main() {
   const categories = await prisma.category.createMany({
     data: [
       {
-        name: 'Ice Cream',
-        description: 'Premium ice cream varieties',
+        name: 'Main Courses',
+        description: 'Popular main course meals',
         image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',
         isActive: true,
       },
       {
-        name: 'Frozen Yogurt',
-        description: 'Healthy frozen yogurt options',
+        name: 'Appetizers',
+        description: 'Healthy appetizer options',
         image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400',
         isActive: true,
       },
       {
-        name: 'Gelato',
-        description: 'Italian-style gelato',
+        name: 'Desserts',
+        description: 'Assorted dessert dishes',
         image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?w=400',
         isActive: true,
       },
       {
-        name: 'Sorbet',
-        description: 'Dairy-free fruit sorbets',
+        name: 'Beverages',
+        description: 'Refreshing drinks',
         image: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?w=400',
         isActive: true,
       },
       {
-        name: 'Frozen Treats',
-        description: 'Popsicles and frozen snacks',
+        name: 'Snacks',
+        description: 'Quick snack options',
         image: 'https://images.unsplash.com/photo-1564298208969-f4a2b9133e9a?w=400',
         isActive: true,
       },
       {
-        name: 'Ice Cream Cakes',
-        description: 'Special occasion cakes',
+        name: 'Meal Combos',
+        description: 'Combo meals for special occasions',
         image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400',
         isActive: true,
       },
@@ -86,197 +86,253 @@ async function main() {
   console.log('📋 Created categories');
 
   // Create products
-  const iceCreamCat = categoryRecords.find(c => c.name === 'Ice Cream')!;
-  const frozenYogurtCat = categoryRecords.find(c => c.name === 'Frozen Yogurt')!;
-  const gelatoCat = categoryRecords.find(c => c.name === 'Gelato')!;
-  const sorbetCat = categoryRecords.find(c => c.name === 'Sorbet')!;
-  const frozenTreatsCat = categoryRecords.find(c => c.name === 'Frozen Treats')!;
-  const iceCreamCakesCat = categoryRecords.find(c => c.name === 'Ice Cream Cakes')!;
+  const mainCoursesCat = categoryRecords.find(c => c.name === 'Main Courses')!;
+  const appetizersCat = categoryRecords.find(c => c.name === 'Appetizers')!;
+  const dessertsCat = categoryRecords.find(c => c.name === 'Desserts')!;
+  const beveragesCat = categoryRecords.find(c => c.name === 'Beverages')!;
+  const snacksCat = categoryRecords.find(c => c.name === 'Snacks')!;
+  const mealCombosCat = categoryRecords.find(c => c.name === 'Meal Combos')!;
 
   await prisma.product.createMany({
     data: [
-      // Ice Cream
+      // Main Courses
       {
-        name: 'Vanilla Bean Ice Cream',
-        description: 'Classic vanilla with real vanilla bean specks',
-        price: 8.99,
+        name: 'Grilled Chicken Platter',
+        description: 'Seasoned grilled chicken with sides',
+        price: 12.99,
         stock: 50,
         image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?w=400',
-        categoryId: iceCreamCat.id,
+        categoryId: mainCoursesCat.id,
         isActive: true,
       },
       {
-        name: 'Chocolate Fudge Ice Cream',
-        description: 'Rich chocolate ice cream with fudge swirls',
-        price: 9.49,
+        name: 'Steak Chimichurri',
+        description: 'Grilled steak with chimichurri sauce',
+        price: 14.99,
         stock: 45,
         image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400',
-        categoryId: iceCreamCat.id,
+        categoryId: mainCoursesCat.id,
         isActive: true,
-      },
+      }
       {
-        name: 'Strawberry Cheesecake Ice Cream',
-        description: 'Creamy strawberry ice cream with cheesecake chunks',
-        price: 10.99,
+        name: 'Salmon Teriyaki',
+        description: 'Teriyaki glazed salmon with vegetables',
+        price: 16.99,
         stock: 35,
         image: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400',
-        categoryId: iceCreamCat.id,
+        categoryId: mainCoursesCat.id,
         isActive: true,
       },
       {
-        name: 'Mint Chocolate Chip Ice Cream',
-        description: 'Refreshing mint ice cream with chocolate chips',
-        price: 9.99,
+        name: 'Pasta Primavera',
+        description: 'Pasta with seasonal vegetables',
+        price: 11.99,
         stock: 40,
         image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400',
-        categoryId: iceCreamCat.id,
+        categoryId: mainCoursesCat.id,
         isActive: true,
       },
       {
-        name: 'Cookies & Cream Ice Cream',
-        description: 'Vanilla ice cream loaded with chocolate cookie pieces',
+        name: 'Quinoa Bowl',
+        description: 'Healthy quinoa bowl with vegetables',
         price: 10.49,
         stock: 42,
         image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
-        categoryId: iceCreamCat.id,
+        categoryId: mainCoursesCat.id,
         isActive: true,
       },
 
-      // Frozen Yogurt
+      // Appetizers
       {
-        name: 'Greek Honey Frozen Yogurt',
-        description: 'Authentic Greek yogurt with natural honey',
+        name: 'Bruschetta',
+        description: 'Toasted bread with tomato and basil',
         price: 7.99,
         stock: 30,
         image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400',
-        categoryId: frozenYogurtCat.id,
+        categoryId: appetizersCat.id,
         isActive: true,
       },
       {
-        name: 'Berry Blast Frozen Yogurt',
-        description: 'Mixed berry frozen yogurt with real fruit pieces',
+        name: 'Stuffed Mushrooms',
+        description: 'Mushrooms stuffed with cheese and herbs',
         price: 8.49,
         stock: 28,
         image: 'https://www.dessertnowdinnerlater.com/wp-content/uploads/2021/06/Triple-Berry-Frozen-Yogurt-1.jpg',
-        categoryId: frozenYogurtCat.id,
+        categoryId: appetizersCat.id,
         isActive: true,
       },
       {
-        name: 'Tropical Mango Frozen Yogurt',
-        description: 'Creamy mango frozen yogurt with coconut flakes',
+        name: 'Crispy Spring Rolls',
+        description: 'Vegetable spring rolls with dipping sauce',
         price: 8.99,
         stock: 25,
         image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
-        categoryId: frozenYogurtCat.id,
+        categoryId: appetizersCat.id,
+        isActive: true,
+      },
+      {
+        name: 'Salmon Teriyaki',
+        description: 'Teriyaki glazed salmon with vegetables',
+        price: 16.99,
+        stock: 35,
+        image: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400',
+        categoryId: mainCoursesCat.id,
+        isActive: true,
+      }
+      {
+        name: 'Pasta Primavera',
+        description: 'Pasta with seasonal vegetables',
+        price: 11.99,
+        stock: 40,
+        image: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400',
+        categoryId: mainCoursesCat.id,
+        isActive: true,
+      },
+      {
+        name: 'Quinoa Bowl',
+        description: 'Healthy quinoa bowl with vegetables',
+        price: 10.49,
+        stock: 42,
+        image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
+        categoryId: mainCoursesCat.id,
+        isActive: true,
+      }
+
+      // Appetizers
+      {
+        name: 'Bruschetta',
+        description: 'Toasted bread with tomato and basil',
+        price: 7.99,
+        stock: 30,
+        image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400',
+        categoryId: appetizersCat.id,
+        isActive: true,
+      },
+      {
+        name: 'Caprese Skewers',
+        description: 'Cherry tomatoes with mozzarella and basil',
+        price: 8.49,
+        stock: 28,
+        image: 'https://www.dessertnowdinnerlater.com/wp-content/uploads/2021/06/Triple-Berry-Frozen-Yogurt-1.jpg',
+        categoryId: appetizersCat.id,
+        isActive: true,
+      },
+      {
+        name: 'Garlic Butter Shrimp',
+        description: 'Sautéed shrimp with garlic butter sauce',
+        price: 8.99,
+        stock: 25,
+        image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
+        categoryId: appetizersCat.id,
         isActive: true,
       },
 
-      // Gelato
+      // Desserts
       {
-        name: 'Pistachio Gelato',
-        description: 'Authentic Italian pistachio gelato',
+        name: 'Chocolate Lava Cake',
+        description: 'Warm chocolate cake with molten center',
         price: 12.99,
         stock: 20,
         image: 'https://images.unsplash.com/photo-1567206563064-6f60f40a2b57?w=400',
-        categoryId: gelatoCat.id,
+        categoryId: dessertsCat.id,
         isActive: true,
       },
       {
-        name: 'Tiramisu Gelato',
-        description: 'Coffee-flavored gelato with mascarpone',
+        name: 'Tiramisu',
+        description: 'Classic coffee-flavored dessert with mascarpone',
         price: 13.49,
         stock: 18,
         image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400',
-        categoryId: gelatoCat.id,
+        categoryId: dessertsCat.id,
         isActive: true,
       },
       {
-        name: 'Lemon Ricotta Gelato',
-        description: 'Fresh lemon gelato with ricotta cheese',
+        name: 'Lemon Cheesecake',
+        description: 'Creamy lemon cheesecake',
         price: 11.99,
         stock: 22,
         image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',
-        categoryId: gelatoCat.id,
+        categoryId: dessertsCat.id,
         isActive: true,
       },
 
-      // Sorbet
+      // Beverages
       {
-        name: 'Raspberry Sorbet',
-        description: 'Pure raspberry sorbet, dairy-free and vegan',
-        price: 6.99,
-        stock: 35,
+        name: 'Iced Tea',
+        description: 'Freshly brewed iced tea',
+        price: 3.99,
+        stock: 100,
         image: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400',
-        categoryId: sorbetCat.id,
+        categoryId: beveragesCat.id,
         isActive: true,
       },
       {
-        name: 'Lemon Lime Sorbet',
-        description: 'Refreshing citrus sorbet',
-        price: 6.49,
-        stock: 38,
+        name: 'Lemonade',
+        description: 'Homemade lemonade',
+        price: 3.49,
+        stock: 100,
         image: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400',
-        categoryId: sorbetCat.id,
+        categoryId: beveragesCat.id,
         isActive: true,
       },
       {
-        name: 'Watermelon Sorbet',
-        description: 'Summer watermelon sorbet',
-        price: 7.49,
-        stock: 32,
+        name: 'Mixed Berry Smoothie',
+        description: 'Mixed berry smoothie with yogurt',
+        price: 5.99,
+        stock: 90,
         image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400',
-        categoryId: sorbetCat.id,
+        categoryId: beveragesCat.id,
         isActive: true,
-      },
+      }
 
-      // Frozen Treats
+      // Snacks
       {
-        name: 'Classic Fudge Popsicles',
-        description: 'Chocolate fudge popsicles on a stick',
-        price: 4.99,
+        name: 'Nachos',
+        description: 'Crispy nachos with cheese and salsa',
+        price: 5.99,
         stock: 60,
         image: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400',
-        categoryId: frozenTreatsCat.id,
+        categoryId: snacksCat.id,
         isActive: true,
       },
       {
-        name: 'Fruit Punch Popsicles',
-        description: 'Colorful fruit punch frozen treats',
-        price: 3.99,
+        name: 'Potato Wedges',
+        description: 'Seasoned potato wedges with dip',
+        price: 4.99,
         stock: 75,
         image: 'https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400',
-        categoryId: frozenTreatsCat.id,
+        categoryId: snacksCat.id,
         isActive: true,
       },
       {
-        name: 'Ice Cream Sandwiches',
-        description: 'Vanilla ice cream between chocolate wafers',
-        price: 5.99,
+        name: 'Chicken Wings',
+        description: 'Spicy chicken wings with sauce',
+        price: 8.99,
         stock: 48,
         image: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=400',
-        categoryId: frozenTreatsCat.id,
+        categoryId: snacksCat.id,
         isActive: true,
-      },
+      }
 
-      // Ice Cream Cakes
+      // Meal Combos
       {
-        name: 'Birthday Celebration Cake',
-        description: 'Vanilla and chocolate ice cream cake with decorations',
+        name: 'Family Combo',
+        description: 'Family meal combo with mains and sides',
         price: 29.99,
         stock: 8,
         image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400',
-        categoryId: iceCreamCakesCat.id,
+        categoryId: mealCombosCat.id,
         isActive: true,
       },
       {
-        name: 'Chocolate Oreo Cake',
-        description: 'Chocolate ice cream cake with Oreo cookies',
+        name: 'Party Combo',
+        description: 'Large combo for parties and gatherings',
         price: 32.99,
         stock: 6,
         image: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=400',
-        categoryId: iceCreamCakesCat.id,
+        categoryId: mealCombosCat.id,
         isActive: true,
-      },
+      }
     ],
   });
 

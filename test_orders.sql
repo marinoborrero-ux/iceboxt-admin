@@ -13,7 +13,7 @@ INSERT INTO categories (id, name, description, is_active, created_at, updated_at
 VALUES 
   ('cat_beverages', 'Beverages', 'Cold drinks and beverages', true, NOW(), NOW()),
   ('cat_snacks', 'Snacks', 'Snacks and quick bites', true, NOW(), NOW()),
-  ('cat_ice_cream', 'Ice Cream', 'Frozen treats and ice cream', true, NOW(), NOW())
+  ('cat_main_courses', 'Main Courses', 'Popular main course meals', true, NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- Crear algunos productos de prueba
@@ -23,8 +23,8 @@ VALUES
   ('prod_water', 'Water Bottle', 'Purified water 500ml', 1.00, 200, true, 'cat_beverages', NOW(), NOW()),
   ('prod_chips', 'Potato Chips', 'Crispy potato chips', 3.00, 50, true, 'cat_snacks', NOW(), NOW()),
   ('prod_cookies', 'Chocolate Cookies', 'Delicious chocolate cookies', 4.50, 30, true, 'cat_snacks', NOW(), NOW()),
-  ('prod_vanilla_ice', 'Vanilla Ice Cream', 'Premium vanilla ice cream', 6.00, 20, true, 'cat_ice_cream', NOW(), NOW()),
-  ('prod_chocolate_ice', 'Chocolate Ice Cream', 'Rich chocolate ice cream', 6.50, 15, true, 'cat_ice_cream', NOW(), NOW())
+  ('prod_grilled_chicken', 'Grilled Chicken Platter', 'Seasoned grilled chicken with sides', 12.00, 20, true, 'cat_main_courses', NOW(), NOW()),
+  ('prod_pasta_primavera', 'Pasta Primavera', 'Pasta with seasonal vegetables', 11.00, 15, true, 'cat_main_courses', NOW(), NOW())
 ON CONFLICT (id) DO NOTHING;
 
 -- Crear algunas órdenes de prueba con estado PENDING
