@@ -178,7 +178,7 @@ async function main() {
         image: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?w=400',
         categoryId: mainCoursesCat.id,
         isActive: true,
-      }
+      },
       {
         name: 'Pasta Primavera',
         description: 'Pasta with seasonal vegetables',
