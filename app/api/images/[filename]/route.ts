@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, { params }: { params: { filename: st
     const fileBuffer = fs.readFileSync(filePath);
     const ext = path.extname(filePath).toLowerCase();
 
-    const mimeTypes = {
+    const mimeTypes: Record<string, string> = {
       '.jpg': 'image/jpeg',
       '.jpeg': 'image/jpeg',
       '.png': 'image/png',
