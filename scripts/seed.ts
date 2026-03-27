@@ -113,7 +113,7 @@ async function main() {
         image: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400',
         categoryId: mainCoursesCat.id,
         isActive: true,
-      }
+      },
       {
         name: 'Salmon Teriyaki',
         description: 'Teriyaki glazed salmon with vegetables',
