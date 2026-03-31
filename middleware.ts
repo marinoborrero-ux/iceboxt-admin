@@ -11,6 +11,7 @@ export default withAuth(
     if (pathname.startsWith('/api/orders/mobile') ||
       pathname.startsWith('/api/orders/') ||
       pathname.startsWith('/api/products/mobile') ||
+      pathname.startsWith('/api/products/') && pathname.includes('/subs') ||
       pathname.startsWith('/api/payments/stripe') ||
       pathname.startsWith('/api/drivers')) {
       console.log('🔍 MOBILE API ACCESS:', pathname);
@@ -35,6 +36,7 @@ export default withAuth(
         !pathname.startsWith('/api/orders/mobile') &&
         !pathname.startsWith('/api/orders/') &&
         !pathname.startsWith('/api/products/mobile') &&
+        !pathname.startsWith('/api/products/') && !pathname.includes('/subs') &&
         !pathname.startsWith('/api/payments/stripe') &&
         !pathname.startsWith('/api/drivers'))) {
       if (!token || token.role !== 'admin') {
@@ -63,6 +65,6 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/((?!api/auth|api/orders|api/products/mobile|api/payments/stripe|api/drivers|_next/static|_next/image|favicon.ico|auth/signin|auth/signup).*)',
+    '/((?!api/auth|api/orders|api/products/mobile|api/products/.*subs|api/payments/stripe|api/drivers|_next/static|_next/image|favicon.ico|auth/signin|auth/signup).*)',
   ],
 };
