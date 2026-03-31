@@ -24,7 +24,7 @@ export async function GET(
     }
 
     // Obtener todos los subproductos para este producto
-    const subs = await prisma.publixSub.findMany({
+    const subs = (await prisma.publixSub.findMany({
       where: {
         idProducts: productId,
         isActive: true,
@@ -35,12 +35,17 @@ export async function GET(
         name: true,
         imageUrl: true,
         isActive: true,
-        price: true,
       },
       orderBy: {
         name: 'asc',
       },
-    });
+    })) as Array<{
+      id: string;
+      idProducts: string;
+      name: string;
+      imageUrl: string | null;
+      isActive: boolean;
+    }>;
 
     // Si no hay subproductos, devolver array vacío
     if (!subs || subs.length === 0) {
@@ -51,16 +56,28 @@ export async function GET(
       });
     }
 
+    // Cargar precios de los productos padre asociados a cada subproducto
+    const productIds = Array.from(new Set(subs.map((sub) => sub.idProducts)));
+    const products = (await prisma.product.findMany({
+      where: { id: { in: productIds } },
+      select: { id: true, price: true },
+    })) as Array<{
+      id: string;
+      price: any;
+    }>;
+
+    const productPriceMap = new Map(products.map((product) => [product.id, product.price]));
+
     // Devolver los subproductos en el formato esperado
     return NextResponse.json({
       success: true,
-      data: subs.map((sub: typeof subs[number]) => ({
+      data: subs.map((sub) => ({
         id: sub.id,
         id_products: sub.idProducts,
         name: sub.name,
         image_url: sub.imageUrl,
         is_active: sub.isActive,
-        price: sub.price,
+        price: productPriceMap.get(sub.idProducts) || null,
       })),
       count: subs.length,
     });
