@@ -35,6 +35,7 @@ export async function GET(
         name: true,
         imageUrl: true,
         isActive: true,
+        price: true,
       },
       orderBy: {
         name: 'asc',
@@ -53,12 +54,13 @@ export async function GET(
     // Devolver los subproductos en el formato esperado
     return NextResponse.json({
       success: true,
-      data: subs.map((sub) => ({
+      data: subs.map((sub: typeof subs[number]) => ({
         id: sub.id,
         id_products: sub.idProducts,
         name: sub.name,
         image_url: sub.imageUrl,
         is_active: sub.isActive,
+        price: sub.price,
       })),
       count: subs.length,
     });
