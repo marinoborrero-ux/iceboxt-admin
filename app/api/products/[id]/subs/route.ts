@@ -56,28 +56,49 @@ export async function GET(
       });
     }
 
-    // Cargar precios de los productos padre asociados a cada subproducto
-    const productIds = Array.from(new Set(subs.map((sub) => sub.idProducts)));
-    const products = (await prisma.product.findMany({
-      where: { id: { in: productIds } },
-      select: { id: true, price: true },
-    })) as Array<{
-      id: string;
-      price: any;
-    }>;
+    // Obtener producto padre para fallback de precio
+    const parentProduct = await prisma.product.findUnique({
+      where: { id: productId },
+      select: { id: true, categoryId: true, price: true },
+    });
 
-    const productPriceMap = new Map(products.map((product) => [product.id, product.price]));
+    // Intentar obtener precio real por subproducto (match por nombre dentro de la misma categoría)
+    const subNames = Array.from(
+      new Set(subs.map((sub) => sub.name.trim()).filter((name) => name.length > 0))
+    );
+
+    const pricedSubProducts = await prisma.product.findMany({
+      where: {
+        isActive: true,
+        name: { in: subNames },
+        ...(parentProduct?.categoryId ? { categoryId: parentProduct.categoryId } : {}),
+      },
+      select: { name: true, price: true },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    const subPriceByName = new Map<string, number>(
+      pricedSubProducts.map((p) => [p.name.trim().toLowerCase(), Number(p.price)])
+    );
+
+    const fallbackParentPrice = parentProduct ? Number(parentProduct.price) : null;
 
     // Devolver los subproductos en el formato esperado
     return NextResponse.json({
       success: true,
       data: subs.map((sub) => ({
+        // precio: primero el precio real del subproducto (si existe), luego fallback al padre
+        // Si ambos faltan, devolver 0 para mantener compatibilidad con la app móvil
+        // y permitir que la UI decida cómo mostrarlo.
         id: sub.id,
         id_products: sub.idProducts,
         name: sub.name,
         image_url: sub.imageUrl,
         is_active: sub.isActive,
-        price: productPriceMap.get(sub.idProducts) || null,
+        price:
+          subPriceByName.get(sub.name.trim().toLowerCase()) ??
+          fallbackParentPrice ??
+          0,
       })),
       count: subs.length,
     });
