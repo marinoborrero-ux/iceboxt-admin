@@ -41,7 +41,7 @@ export async function GET(
         name: 'asc',
       },
     })) as Array<{
-      id: string;
+      id: number;
       idProducts: string;
       name: string;
       imageUrl: string | null;
@@ -80,7 +80,7 @@ export async function GET(
     });
 
     const subPriceByName = new Map<string, number>(
-      pricedSubProducts.map((p) => [p.name.trim().toLowerCase(), Number(p.price)])
+      pricedSubProducts.map((p: { name: string; price: number }) => [p.name.trim().toLowerCase(), Number(p.price)])
     );
 
     const fallbackParentPrice = parentProduct ? Number(parentProduct.price) : null;
