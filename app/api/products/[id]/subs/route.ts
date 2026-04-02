@@ -5,8 +5,8 @@ export const dynamic = 'force-dynamic';
 
 /**
  * GET /api/products/[id]/subs
- * Obtiene todos los subproductos (publix_sub) para un producto específico
- * Respuesta: { success: boolean, data: SubProduct[] }
+ * Retrieves all sub-products (publix_sub) for a specific product
+ * Response: { success: boolean, data: SubProduct[] }
  */
 export async function GET(
   request: NextRequest,
@@ -15,7 +15,7 @@ export async function GET(
   try {
     const productId = params.id;
 
-    // Validar que el ID del producto no esté vacío
+    // Validate that the product ID is not empty
     if (!productId || productId.trim() === '') {
       return NextResponse.json(
         { success: false, error: 'Product ID is required' },
@@ -23,7 +23,7 @@ export async function GET(
       );
     }
 
-    // Obtener todos los subproductos para este producto
+    // Retrieve all sub-products for this product
     const subs = (await prisma.publixSub.findMany({
       where: {
         idProducts: productId,
@@ -35,6 +35,7 @@ export async function GET(
         name: true,
         imageUrl: true,
         isActive: true,
+        price: true, // Attempt to get price directly from sub-product
       },
       orderBy: {
         name: 'asc',
@@ -45,9 +46,10 @@ export async function GET(
       name: string;
       imageUrl: string | null;
       isActive: boolean;
+      price: number | null; // Price from sub-product, may be null  
     }>;
 
-    // Si no hay subproductos, devolver array vacío
+    // If no sub-products exist, return empty array
     if (!subs || subs.length === 0) {
       return NextResponse.json({
         success: true,
@@ -56,13 +58,13 @@ export async function GET(
       });
     }
 
-    // Obtener producto padre para fallback de precio
+    // Retrieve parent product for price fallback
     const parentProduct = await prisma.product.findUnique({
       where: { id: productId },
       select: { id: true, categoryId: true, price: true },
     });
 
-    // Intentar obtener precio real por subproducto (match por nombre dentro de la misma categoría)
+    // Attempt to get real price per sub-product (match by name within same category)
     const subNames = Array.from(
       new Set(subs.map((sub) => sub.name.trim()).filter((name) => name.length > 0))
     );
@@ -83,13 +85,13 @@ export async function GET(
 
     const fallbackParentPrice = parentProduct ? Number(parentProduct.price) : null;
 
-    // Devolver los subproductos en el formato esperado
+    // Return sub-products in expected format
     return NextResponse.json({
       success: true,
       data: subs.map((sub) => ({
-        // precio: primero el precio real del subproducto (si existe), luego fallback al padre
-        // Si ambos faltan, devolver 0 para mantener compatibilidad con la app móvil
-        // y permitir que la UI decida cómo mostrarlo.
+        // price: first try real sub-product price (if exists), then fallback to parent price
+        // If both are missing, return 0 to maintain compatibility with mobile app
+        // and allow UI to decide how to display it
         id: sub.id,
         id_products: sub.idProducts,
         name: sub.name,
