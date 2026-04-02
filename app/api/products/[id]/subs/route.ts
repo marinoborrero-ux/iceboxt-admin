@@ -97,7 +97,9 @@ export async function GET(
         name: sub.name,
         image_url: sub.imageUrl,
         is_active: sub.isActive,
+        // price priority: direct from publix_sub → name lookup in product table → parent price → 0
         price:
+          (sub.price != null && sub.price > 0 ? sub.price : null) ??
           subPriceByName.get(sub.name.trim().toLowerCase()) ??
           fallbackParentPrice ??
           0,
