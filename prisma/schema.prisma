@@ -168,6 +168,7 @@ model PublixSub {
   idProducts String  @map("id_products")
   name       String
   imageUrl   String? @map("image_url")
+  price      Int?    @map("price")
   isActive   Boolean @default(true) @map("is_active")
 
   @@map("publix_sub")
